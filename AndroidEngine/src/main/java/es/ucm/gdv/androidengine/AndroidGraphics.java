@@ -1,30 +1,29 @@
 package es.ucm.gdv.androidengine;
 
 import android.content.res.AssetManager;
-import android.graphics.Bitmap;
 import android.view.SurfaceView;
 
 import es.ucm.gdv.engine.Graphics;
 import es.ucm.gdv.engine.Image;
+import android.graphics.Canvas;
+import android.view.SurfaceHolder;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.*;
 
 
 
 public class AndroidGraphics implements Graphics{
 
-    private final int windowWidth = 1080;
-    private final int windowHeight = 1920;
-
     SurfaceView _surfaceView;
     AssetManager _assetManager;
     InputStream _inputStream;
+    SurfaceHolder _holder;
 
-    public void AndroidGraphics(SurfaceView sv, AssetManager am){
+    public AndroidGraphics(SurfaceView sv, AssetManager am){
         _surfaceView = sv;
         _assetManager = am;
+        _holder  = sv.getHolder();
     }
 
     @Override
@@ -59,11 +58,30 @@ public class AndroidGraphics implements Graphics{
 
     @Override
     public int getWidth() {
-        return windowWidth;
+        return _surfaceView.getWidth();
     }
 
     @Override
     public int getHeight() {
-        return windowHeight;
+        return _surfaceView.getHeight();
+    }
+
+    private Canvas getCanvas(){
+        Canvas _canvas;
+        while(!_holder.getSurface().isValid());{
+           _canvas = _holder.lockCanvas();
+        }
+        return _canvas;
+    }
+    private void freeCanvas(Canvas c){
+        _holder.unlockCanvasAndPost(c);
+    }
+
+    public void renderPresent(){
+        Canvas canvas = getCanvas();
+
+        //Render
+
+        freeCanvas(canvas);
     }
 }
