@@ -75,19 +75,29 @@ public class AndroidGame implements Game {
 
         // Actualiza la lógica
         public void update(float deltaTime){
-
+            //Llama al update de la logica
         }
 
         public void render(){
-            _graphics.renderPresent();
+            //Llama al render de la logica
+
         }
 
         public void run(){
+
+            if (_renderThread != Thread.currentThread()) {
+                // ¿¿Quién es el tuercebotas que está llamando al
+                // run() directamente?? Programación defensiva
+                // otra vez, con excepción, por merluzo.
+                // AJAJAJAJJA PEDRO ERES UN GENIO
+                throw new RuntimeException("run() should not be called directly");
+            }
 
             deltaTime = 0.0f;
             lastFrameTime = System.nanoTime();
 
             while(_running){
+
                 deltaTime(); //Actualizamos el deltaTime
                 update(deltaTime);
                 render();
