@@ -17,6 +17,6 @@ public class Sprite {
     Rect _rectSrc;
 
     public void draw(Graphics g){
-        g.drawImage(_image);
+        g.drawImage(_image, _rectSrc,0,0,0);
     }
 }

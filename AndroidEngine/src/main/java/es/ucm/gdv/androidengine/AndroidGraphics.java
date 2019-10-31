@@ -6,6 +6,7 @@ import android.view.SurfaceView;
 import es.ucm.gdv.engine.Graphics;
 import es.ucm.gdv.engine.Image;
 import es.ucm.gdv.engine.Rect;
+import es.ucm.gdv.engine.Sprite;
 
 import android.graphics.Canvas;
 import android.view.SurfaceHolder;
@@ -49,8 +50,15 @@ public class AndroidGraphics implements Graphics{
     }
 
     @Override
-    public void clear(int Color) {
+    public Sprite createSprite(Image img, Rect src) {
+        return new Sprite(img, src);
+    }
 
+    @Override
+    public void clear(int Color) {
+        Canvas canvas = _holder.lockCanvas();
+        canvas.drawColor(Color);
+        _holder.unlockCanvasAndPost(canvas);
     }
 
     /**
@@ -113,4 +121,12 @@ public class AndroidGraphics implements Graphics{
         return _surfaceView.getHeight();
     }
 
+    /**
+     * getter para conocer el holder
+     *
+     * @return SurfaceHolder
+     */
+    public SurfaceHolder get_holder() {
+        return _holder;
+    }
 }

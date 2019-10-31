@@ -12,18 +12,23 @@ import java.util.Vector;
 import es.ucm.gdv.engine.Game;
 import es.ucm.gdv.engine.Graphics;
 import es.ucm.gdv.engine.Input;
+import es.ucm.gdv.engine.LogicInterface;
 
 public class AndroidGame implements Game {
 
-    Vector<AndroidImage> _sprites = new Vector<AndroidImage>(15, 5);
     AndroidGraphics _graphics;
     Input _input;
     GameFlow _gameFlow;
+    LogicInterface _logic;
 
-    public AndroidGame(AppCompatActivity ac){
+
+    public AndroidGame(AppCompatActivity ac, LogicInterface logic){
         _gameFlow = new GameFlow(ac);
         _graphics = new AndroidGraphics(_gameFlow, ac.getAssets());
         _input = new AndroidInput();
+        _logic = logic;
+        _logic.init(this);
+
     }
 
     @Override
@@ -46,6 +51,12 @@ public class AndroidGame implements Game {
         float deltaTime;
         long lastFrameTime;
 
+        /**
+         * Constructor.
+         *
+         * @param context Contexto en el que se integrará la vista
+         *                (normalmente una actividad).
+         */
         public GameFlow (Context context){
             super(context);
         }
@@ -76,11 +87,14 @@ public class AndroidGame implements Game {
         // Actualiza la lógica
         public void update(float deltaTime){
             //Llama al update de la logica
+            _logic.update(deltaTime);
         }
 
         public void render(){
             //Llama al render de la logica
-
+            while (!getHolder().getSurface().isValid())
+                ;
+            _logic.render();
         }
 
         public void run(){
@@ -107,8 +121,6 @@ public class AndroidGame implements Game {
         public void onDraw(Canvas c){
 
         }
-
-
 
         public void deltaTime(){
             long currentTime = System.nanoTime();
