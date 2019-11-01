@@ -9,21 +9,21 @@ import es.ucm.gdv.engine.Image;
 
 public class AndroidImage implements Image {
 
-    int _width;
-    int _height;
-    Bitmap _sprite;
+    Bitmap _bitmap;
 
     public AndroidImage(InputStream inputStream) {
-        _sprite = BitmapFactory.decodeStream(inputStream);
+        _bitmap = BitmapFactory.decodeStream(inputStream);
     }
 
     @Override
     public int getWidth() {
-        return _width;
+        return _bitmap.getWidth();
     }
 
     @Override
     public int getHeight() {
-        return _height;
+        return _bitmap.getHeight();
     }
+
+    public Bitmap getBitmap(){ return _bitmap; }
 }

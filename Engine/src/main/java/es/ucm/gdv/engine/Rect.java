@@ -7,33 +7,31 @@ public class Rect {
      * y ortas 2 para el segundo punto. Con esos dos puntos construimos
      * El rectángulo.
      *
-     * @param horzX Coordenada X del primer punto
-     * @param horzY Coordenada Y del primer punto
-     * @param vertX Coordenada X del segundo punto
-     * @param vertY Coordenada Y del segundo punto
+     * @param left Coordenada left
+     * @param right Coordenada right
+     * @param top Coordenada top del
+     * @param bottom Coordenada bottom
      */
-     public Rect(int horzX, int horzY, int vertX, int vertY){
-         _horzX = horzX;
-         _horzY = horzY;
-         _vertX = vertX;
-         _vertY = vertY;
+     public Rect(int left, int right, int top, int bottom){
+         _left = left;
+         _right = right;
+         _top = top;
+         _bottom = bottom;
      }
 
-     int _horzX;
-     int _horzY;
-     int _vertX;
-     int _vertY;
+     int _left;
+     int _right;
+     int _top;
+     int _bottom;
 
-     int get_horzX(){
-         return _horzX;
+     public int get_left(){
+         return _left;
      }
-    int get_horzY(){
-        return _horzY;
+     public int get_right(){ return _right; }
+     public int get_top(){
+        return _top;
     }
-    int get_vertX(){
-        return _vertX;
-    }
-    int get_vertY(){
-        return _vertY;
+     public int get_bottom(){
+        return _bottom;
     }
 }

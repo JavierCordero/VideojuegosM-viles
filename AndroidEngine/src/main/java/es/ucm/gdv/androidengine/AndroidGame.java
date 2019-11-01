@@ -94,7 +94,9 @@ public class AndroidGame implements Game {
             //Llama al render de la logica
             while (!getHolder().getSurface().isValid())
                 ;
+            _graphics.lockCanvas();
             _logic.render();
+            _graphics.freeCanvas();
         }
 
         public void run(){

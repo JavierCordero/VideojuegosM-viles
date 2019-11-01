@@ -6,6 +6,7 @@ import android.view.SurfaceView;
 import es.ucm.gdv.engine.Graphics;
 import es.ucm.gdv.engine.Image;
 import es.ucm.gdv.engine.Rect;
+import es.ucm.gdv.engine.RescaleGraphics;
 import es.ucm.gdv.engine.Sprite;
 
 import android.graphics.Canvas;
@@ -16,12 +17,13 @@ import java.io.InputStream;
 
 
 
-public class AndroidGraphics implements Graphics{
+public class AndroidGraphics extends RescaleGraphics {
 
     SurfaceView _surfaceView;
     AssetManager _assetManager;
     InputStream _inputStream;
     SurfaceHolder _holder;
+    Canvas _canvas = null;
 
     public AndroidGraphics(SurfaceView sv, AssetManager am){
         _surfaceView = sv;
@@ -49,57 +51,54 @@ public class AndroidGraphics implements Graphics{
         return null;
     }
 
+    /**
+     * Bloquea el canvas para ser usado posteriormente
+     */
+    public void lockCanvas(){
+        _canvas = _holder.lockCanvas();
+    }
+
+    /**
+     * Desbloquea el canvas, lo habitual es llamarlo tras renderizar
+     */
+    public void freeCanvas(){
+        _holder.unlockCanvasAndPost(_canvas);
+    }
+
     @Override
     public Sprite createSprite(Image img, Rect src) {
         return new Sprite(img, src);
     }
 
+    /**
+     * Limpia la pantalla dibujando rellenando la aplicación con un color
+     *
+     * @param Color color de relleno
+     */
     @Override
     public void clear(int Color) {
-        Canvas canvas = _holder.lockCanvas();
-        canvas.drawColor(Color);
-        _holder.unlockCanvasAndPost(canvas);
+        _canvas.drawColor(Color);
     }
 
     /**
-     * Dibuja una imagen completa en pantalla en coordenadas x, y
+     * Recibe los parámetros ya escalados para pintar y los transorma a rectangulos
+     * de android
      *
-     * @param image Imagen donde se encuentra el sprite a dibujar
-     * @param x coordenada x donde se dibujara el primer pixel
-     * @param y coordenada y donde se dibujara el primer pixel
-     * @param alpha transparencia del sprite
+     * @param img imagen a pintar
+     * @param dest Rectangulo destino de la imagen a pintar
+     * @param src Rectangulo fuente donde se va a pintar
      */
     @Override
-    public void drawImage(Image image, int x, int y, int alpha) {
+    protected void finalDrawImage(Image img, Rect dest, Rect src){
+        android.graphics.Rect aDest = new android.graphics.Rect(
+                dest.get_left(),dest.get_top(),dest.get_right(), dest.get_bottom());
 
-    }
+        android.graphics.Rect aSrc = new android.graphics.Rect(
+                src.get_left(), src.get_top(), src.get_right(), src.get_bottom());
 
-    /**
-     * Dibuja la fracción seleccionada de imagen en pantalla en coordenadas x, y
-     *
-     * @param image Imagen donde se encuentra el sprite a dibujar
-     * @param src rectángulo de la imagen a dibujar (sprite)
-     * @param x coordenada x donde se dibujara el primer pixel
-     * @param y coordenada y donde se dibujara el primer pixel
-     * @param alpha transparencia del sprite
-     */
-    @Override
-    public void drawImage(Image image, Rect src, int x, int y, int alpha) {
+        _canvas.drawBitmap(((AndroidImage)img).getBitmap(), aDest, aSrc, null);
+    } //finalDrawImage
 
-    }
-
-    /**
-     * Dibuja una fracción de imagen en pantalla la posición y tamaño del rectangulo dest
-     *
-     * @param image Imagen donde se encuentra el sprite a dibujar
-     * @param src rectángulo de la imagen a dibujar (sprite)
-     * @param dest rectangulo destino de dibujo, afecta escalado
-     * @param alpha transparencia del sprite
-     */
-    @Override
-    public void drawImage(Image image, Rect src, Rect dest, int alpha) {
-
-    }
 
     /**
      * getter para conocer dimensiones de pantalla
