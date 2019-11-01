@@ -10,9 +10,9 @@ import java.awt.*;
 
 public class PCGraphics implements Graphics {
 
-
+    int xSize = 800, ySize = 600;
     public class Ventana extends JFrame {
-        int xSize = 800, ySize = 600;
+
 
         PCGraphics _graphics;
 
@@ -96,7 +96,8 @@ public class PCGraphics implements Graphics {
 
     @Override
     public Image newImage(String name) {
-        return null;
+       PCImage _image = new PCImage(name);
+       return _image;
     }
 
     @Override
@@ -107,12 +108,31 @@ public class PCGraphics implements Graphics {
     @Override
     public void clear(int color) {
 
+        drawGraphics();
+
+        Color c = new Color(color);
+        _graphics.setColor(c);
+        _graphics.fillRect(0, 0, getWidth(), getHeight());
+
+        showGraphics();
+
+    }
+
+    private void drawGraphics(){
+        _graphics = _strategy.getDrawGraphics();
+    }
+
+    private void showGraphics(){
+        _graphics.dispose();
+        _strategy.show();
+    }
+
+   /* public void draw(){
         do {
             do {
                 _graphics = _strategy.getDrawGraphics();
                 try {
-                    _graphics.setColor(Color.blue);
-                    _graphics.fillRect(0, 0, getWidth(), getHeight());
+
                 }
                 finally {
                     _graphics.dispose();
@@ -121,7 +141,7 @@ public class PCGraphics implements Graphics {
             _strategy.show();
         } while(_strategy.contentsLost());
     }
-
+    */
     @Override
     public void drawImage(Image image, int x, int y, int alpha) {
 
@@ -143,11 +163,11 @@ public class PCGraphics implements Graphics {
 
     @Override
     public int getWidth() {
-        return 0;
+        return xSize;
     }
 
     @Override
     public int getHeight() {
-        return 0;
+        return ySize;
     }
 }
