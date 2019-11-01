@@ -103,7 +103,6 @@ public class AndroidGame implements Game {
                 // ¿¿Quién es el tuercebotas que está llamando al
                 // run() directamente?? Programación defensiva
                 // otra vez, con excepción, por merluzo.
-                // AJAJAJAJJA PEDRO ERES UN GENIO
                 throw new RuntimeException("run() should not be called directly");
             }
 
