@@ -22,13 +22,14 @@ public class AndroidGame implements Game {
     LogicInterface _logic;
 
 
-    public AndroidGame(AppCompatActivity ac, LogicInterface logic){
+
+
+    public AndroidGame(AppCompatActivity ac, LogicInterface logic, int screenWidth, int screenHeight){
         _gameFlow = new GameFlow(ac);
-        _graphics = new AndroidGraphics(_gameFlow, ac.getAssets());
+        _graphics = new AndroidGraphics(_gameFlow, ac.getAssets(), screenWidth, screenHeight);
         _input = new AndroidInput();
         _logic = logic;
         _logic.init(this);
-
     }
 
     @Override
@@ -40,6 +41,7 @@ public class AndroidGame implements Game {
     public Input getInput() {
         return _input;
     }
+
 
     public GameFlow getGameFlow() { return _gameFlow; }
 

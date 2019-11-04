@@ -34,4 +34,28 @@ public class Rect {
      public int get_bottom(){
         return _bottom;
     }
+
+    public void set_left(int _left) {
+        this._left = _left;
+    }
+
+    public void set_right(int _right) {
+        this._right = _right;
+    }
+
+    public void set_top(int _top) {
+        this._top = _top;
+    }
+
+    public void set_bottom(int _bottom) {
+        this._bottom = _bottom;
+    }
+
+    public void setPosition(int left, int right, int top, int bottom){
+        _left = left;
+        _right = right;
+        _top = top;
+        _bottom = bottom;
+    }
+
 }

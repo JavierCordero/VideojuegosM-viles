@@ -2,7 +2,6 @@ package es.ucm.gdv.engine;
 
 public interface Graphics {
     public Image newImage(String name);
-    public Sprite createSprite(Image img, Rect src);
     public void clear(int Color);
     public void drawImage(Image image, int x, int y, int alpha);
     public void drawImage(Image image, Rect src, int x, int y, int alpha);

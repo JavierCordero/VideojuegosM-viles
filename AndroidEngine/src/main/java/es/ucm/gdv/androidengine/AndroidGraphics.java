@@ -25,12 +25,28 @@ public class AndroidGraphics extends RescaleGraphics {
     SurfaceHolder _holder;
     Canvas _canvas = null;
 
-    public AndroidGraphics(SurfaceView sv, AssetManager am){
+
+    /**
+     * Constructoda de la clase Android Graphics
+     *
+     * @param sv surfaceView
+     * @param am AssetManager
+     */
+    public AndroidGraphics(SurfaceView sv, AssetManager am, int screenWidth, int screenHeight){
+        super(screenWidth, screenHeight);
         _surfaceView = sv;
         _assetManager = am;
         _holder  = sv.getHolder();
+
+
     }
 
+    /**
+     * Carga una imagen y la devuelve, si falla lanza excepcion y devuelve null
+     *
+     * @param name Nombre de la ruta de la imagen
+     * @return Image si funciona, null si falla
+     */
     @Override
     public Image newImage(String name) {
         try{
@@ -65,11 +81,6 @@ public class AndroidGraphics extends RescaleGraphics {
         _holder.unlockCanvasAndPost(_canvas);
     }
 
-    @Override
-    public Sprite createSprite(Image img, Rect src) {
-        return new Sprite(img, src);
-    }
-
     /**
      * Limpia la pantalla dibujando rellenando la aplicación con un color
      *
@@ -99,26 +110,6 @@ public class AndroidGraphics extends RescaleGraphics {
         _canvas.drawBitmap(((AndroidImage)img).getBitmap(), aDest, aSrc, null);
     } //finalDrawImage
 
-
-    /**
-     * getter para conocer dimensiones de pantalla
-     *
-     * @return int en pixeles del ancho de pantalla
-     */
-    @Override
-    public int getWidth() {
-        return _surfaceView.getWidth();
-    }
-
-    /**
-     * getter para conocer dimensiones de pantalla
-     *
-     * @return int en pixeles del alto de pantalla
-     */
-    @Override
-    public int getHeight() {
-        return _surfaceView.getHeight();
-    }
 
     /**
      * getter para conocer el holder

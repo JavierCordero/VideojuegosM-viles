@@ -38,7 +38,10 @@ public class ResourceManager {
      * @param SpriteName nombre con el que se guardara la referencia
      */
     public void createSpriteFromImage(String name, Rect src, String SpriteName){
-        _sprites.put(SpriteName, _g.getGraphics().createSprite(_images.get(name), src));
+        _sprites.put(SpriteName, new Sprite(_images.get(name), src));
+    }
+    public void createSpriteFromImage(String name, Rect src, int x, int y, String SpriteName){
+        _sprites.put(SpriteName, new Sprite(_images.get(name), src,x,y));
     }
 
     /**

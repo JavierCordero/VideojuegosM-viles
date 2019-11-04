@@ -4,8 +4,7 @@ public class Sprite {
 
     Image _image;
     Rect _rectSrc;
-    int _x;
-    int _y;
+
 
     /**
      * Constructora de Sprite
@@ -16,8 +15,6 @@ public class Sprite {
     public Sprite(Image img, Rect src){
         _image = img;
         _rectSrc = src;
-        _x = 0;
-        _y = 0;
     }
     /**
      * Constructora de Sprite
@@ -30,11 +27,18 @@ public class Sprite {
     public Sprite(Image img, Rect src, int x, int y){
         _image = img;
         _rectSrc = src;
-        _x = x;
-        _y = y;
     }
 
-    public void draw(Graphics g){
-        g.drawImage(_image, _rectSrc,_x,_y,255);
+    public int getSpriteWidth(){
+        return _rectSrc._right;
+    }
+
+    public int getSpriteHeight(){
+        return _rectSrc._bottom;
+    }
+
+
+    public void draw(Graphics g, Rect dest){
+        g.drawImage(_image, _rectSrc,dest, 255);
     }
 }

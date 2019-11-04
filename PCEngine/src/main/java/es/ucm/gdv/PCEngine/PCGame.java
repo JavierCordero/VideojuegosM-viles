@@ -40,4 +40,14 @@ public class PCGame implements Game {
     public Input getInput() {
         return null;
     }
+
+    @Override
+    public int getScreenWidth() {
+        return 0;
+    }
+
+    @Override
+    public int getScreenHeight() {
+        return 0;
+    }
 }

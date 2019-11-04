@@ -20,8 +20,20 @@ public class Logic implements LogicInterface {
         _game = game;
         _resourceManager = new ResourceManager(_game);
 
-        _resourceManager.LoadImage("balls", _game.getGraphics().newImage("balls.png"));
-        _resourceManager.createSpriteFromImage("balls", new Rect(0,128,0,128), "ball");
+        _resourceManager.LoadImage("players", _game.getGraphics().newImage("players.png"));
+        _resourceManager.LoadImage("backgrounds", _game.getGraphics().newImage("backgrounds.png"));
+
+        _resourceManager.createSpriteFromImage("players",
+                                                new Rect(0,528,0,384/2),
+                                                "whitePlayer");
+
+        _resourceManager.createSpriteFromImage("players",
+                                                new Rect(0,528,384/2,384),
+                                                "blackPlayer");
+
+        _resourceManager.createSpriteFromImage("backgrounds",
+                                                new Rect(0,288/9,0,32),
+                                                "greenBackground");
     }
 
     @Override
@@ -31,8 +43,21 @@ public class Logic implements LogicInterface {
 
     @Override
     public Boolean render() {
-        _game.getGraphics().clear(0xFFF000FF);
-        _resourceManager.getSprite("ball").draw(_game.getGraphics());
+        //_game.getGraphics().clear(0xFFF000FF); //Test para probar el clear, aqui lo dejo por ahora para que no se me olvide el color
+        _resourceManager.getSprite("greenBackground").draw(_game.getGraphics(),   new Rect(0,1080,0,1920));
+        _resourceManager.getSprite("whitePlayer").draw(_game.getGraphics(),
+                new Rect((_game.getGraphics().getWidth()/2)-_resourceManager.getSprite("whitePlayer").getSpriteWidth()/2,
+                        (_game.getGraphics().getWidth()/2)+_resourceManager.getSprite("whitePlayer").getSpriteWidth()/2,
+                        1200-_resourceManager.getSprite("whitePlayer").getSpriteHeight()/2,
+                        1200+_resourceManager.getSprite("whitePlayer").getSpriteHeight()/2));
+
+        /*_resourceManager.getSprite("whitePlayer").draw(_game.getGraphics(),
+                new Rect(250,
+                        640,
+                        0,
+                        _resourceManager.getSprite("whitePlayer").getSpriteHeight()));*/
+
+
         return true;
     }
 }

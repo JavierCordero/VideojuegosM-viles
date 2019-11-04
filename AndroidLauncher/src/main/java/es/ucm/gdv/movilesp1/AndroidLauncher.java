@@ -1,7 +1,10 @@
 package es.ucm.gdv.movilesp1;
 
+import android.content.res.Configuration;
+import android.graphics.Point;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.Display;
 
 import es.ucm.gdv.Logic.Logic;
 import es.ucm.gdv.androidengine.AndroidGame;
@@ -17,10 +20,10 @@ public class AndroidLauncher extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         //setContentView(R.layout.activity_main);
-        Logic l = new Logic();
-        game = new AndroidGame(this, l);
+        Logic logic = new Logic();
+        Point size = getAndroidScreenSize();
+        game = new AndroidGame(this, logic, size.x, size.y);
         setContentView(game.getGameFlow());
-
     }
 
     @Override
@@ -35,5 +38,11 @@ public class AndroidLauncher extends AppCompatActivity {
         game.getGameFlow().pause();
     }
 
-
+    private Point getAndroidScreenSize()
+    {
+        Display display = getWindowManager().getDefaultDisplay();
+        Point size = new Point();
+        display.getSize(size);
+        return size;
+    }
 }
