@@ -13,6 +13,7 @@ import es.ucm.gdv.engine.Game;
 import es.ucm.gdv.engine.Graphics;
 import es.ucm.gdv.engine.Input;
 import es.ucm.gdv.engine.LogicInterface;
+import es.ucm.gdv.engine.RescaleGraphics;
 
 public class AndroidGame implements Game {
 
@@ -21,15 +22,16 @@ public class AndroidGame implements Game {
     GameFlow _gameFlow;
     LogicInterface _logic;
 
-
-
-
     public AndroidGame(AppCompatActivity ac, LogicInterface logic, int screenWidth, int screenHeight){
         _gameFlow = new GameFlow(ac);
         _graphics = new AndroidGraphics(_gameFlow, ac.getAssets(), screenWidth, screenHeight);
         _input = new AndroidInput();
         _logic = logic;
         _logic.init(this);
+    }
+
+    public void ScreenOrientation(int LogicalW, int LogicalH, int screenW, int screenH){
+        ((RescaleGraphics)_graphics).setLogicalScale(LogicalW, LogicalH, screenW, screenH);
     }
 
     @Override

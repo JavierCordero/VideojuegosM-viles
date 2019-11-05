@@ -8,7 +8,9 @@ import android.view.Display;
 
 import es.ucm.gdv.Logic.Logic;
 import es.ucm.gdv.androidengine.AndroidGame;
+import es.ucm.gdv.androidengine.AndroidGraphics;
 import es.ucm.gdv.engine.Game;
+import es.ucm.gdv.engine.RescaleGraphics;
 
 
 public class AndroidLauncher extends AppCompatActivity {
@@ -27,22 +29,35 @@ public class AndroidLauncher extends AppCompatActivity {
     }
 
     @Override
-    protected void onResume(){
+    protected void onResume() {
         super.onResume();
         game.getGameFlow().resume();
     }
 
     @Override
-    protected void onPause(){
+    protected void onPause() {
         super.onPause();
         game.getGameFlow().pause();
     }
 
-    private Point getAndroidScreenSize()
-    {
+    private Point getAndroidScreenSize() {
         Display display = getWindowManager().getDefaultDisplay();
         Point size = new Point();
         display.getSize(size);
         return size;
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+
+        Point p = getAndroidScreenSize();
+
+        // Checks the orientation of the screen
+        if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            game.ScreenOrientation(1920, 1080, p.x, p.y);
+        } else if (newConfig.orientation == Configuration.ORIENTATION_PORTRAIT){
+            game.ScreenOrientation(1080, 1920, p.x, p.y);
+        }
     }
 }

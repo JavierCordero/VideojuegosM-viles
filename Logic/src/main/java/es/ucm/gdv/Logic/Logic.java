@@ -45,17 +45,12 @@ public class Logic implements LogicInterface {
     public Boolean render() {
         //_game.getGraphics().clear(0xFFF000FF); //Test para probar el clear, aqui lo dejo por ahora para que no se me olvide el color
         _resourceManager.getSprite("greenBackground").draw(_game.getGraphics(),   new Rect(0,1080,0,1920));
-        _resourceManager.getSprite("whitePlayer").draw(_game.getGraphics(),
+        /*_resourceManager.getSprite("whitePlayer").draw(_game.getGraphics(),
                 new Rect((_game.getGraphics().getWidth()/2)-_resourceManager.getSprite("whitePlayer").getSpriteWidth()/2,
                         (_game.getGraphics().getWidth()/2)+_resourceManager.getSprite("whitePlayer").getSpriteWidth()/2,
                         1200-_resourceManager.getSprite("whitePlayer").getSpriteHeight()/2,
-                        1200+_resourceManager.getSprite("whitePlayer").getSpriteHeight()/2));
-
-        /*_resourceManager.getSprite("whitePlayer").draw(_game.getGraphics(),
-                new Rect(250,
-                        640,
-                        0,
-                        _resourceManager.getSprite("whitePlayer").getSpriteHeight()));*/
+                        1200+_resourceManager.getSprite("whitePlayer").getSpriteHeight()/2));*/
+        _resourceManager.getSprite("whitePlayer").draw(_game.getGraphics(),   new Rect(540-264,540+264,1200,1397));
 
 
         return true;

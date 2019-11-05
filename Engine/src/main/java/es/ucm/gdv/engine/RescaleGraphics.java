@@ -3,9 +3,9 @@ package es.ucm.gdv.engine;
 public abstract class RescaleGraphics implements Graphics {
 
 
-    protected static final int LogicalWidth = 1080;
-    protected static final int LogicalHeight = 1920;
-    protected static final float AspectRatio = LogicalWidth/LogicalHeight;
+    protected static int LogicalWidth = 1080;
+    protected static int LogicalHeight = 1920;
+    protected static float AspectRatio = LogicalWidth/LogicalHeight;
     int _screenWidth;
     int _screenHeight;
     float ScaleFactor;
@@ -96,4 +96,27 @@ public abstract class RescaleGraphics implements Graphics {
 
     protected void finalDrawImage(Image img, Rect dest, Rect src){
     } //finalDrawImage
+
+    /**
+     * Establece los nuevos parametros de pantalla
+     *
+     * @param LogicalW ancho logico
+     * @param LogicalH alto logico
+     * @param screenW ancho real sobre la pantalla
+     * @param screenH alto real sobre la pantalla
+     */
+    public void setLogicalScale(int LogicalW, int LogicalH, int screenW, int screenH){
+        LogicalWidth = LogicalW;
+        LogicalHeight = LogicalH;
+        _screenWidth = screenW;
+        _screenHeight = screenH;
+
+        diffX = _screenWidth - LogicalWidth;
+        diffY = _screenHeight - LogicalHeight;
+        float scaleW = (float)_screenWidth/ (float)LogicalWidth;
+        float scaleH = (float)_screenHeight/ (float)LogicalHeight;
+        if(scaleW < scaleH)
+            ScaleFactor = scaleW;
+        else ScaleFactor = scaleH;
+    }
 }
