@@ -7,15 +7,17 @@ import es.ucm.gdv.engine.RescaleGraphics;
 import es.ucm.gdv.engine.Sprite;
 import java.awt.image.*;
 import javax.swing.JFrame;
+import javax.swing.JPanel;
 import java.awt.*;
 
 public class PCGraphics extends RescaleGraphics {
 
-    int xSize = 800, ySize = 600;
+    int _width, _height;
     public class Ventana extends JFrame {
 
 
         PCGraphics _graphics;
+        JPanel panel;
 
         /**
          * Constructor.
@@ -40,7 +42,7 @@ public class PCGraphics extends RescaleGraphics {
          */
         public boolean init() {
 
-            setSize(xSize,ySize);
+            setSize(_width, _height);
             setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
             //_graphics = new PCGraphics(ventana);
 
@@ -52,8 +54,10 @@ public class PCGraphics extends RescaleGraphics {
     Ventana _ventana;
     java.awt.Graphics _graphics;
 
-    public PCGraphics(){
+    public PCGraphics(int width, int height){
+        super(width, height);
 
+        _width = width; _height = height;
         System.out.println("Creando ventana...");
        _ventana = new Ventana("Mi juego super increible en 4K");
         if (!_ventana.init()) {
@@ -142,32 +146,31 @@ public class PCGraphics extends RescaleGraphics {
         } while(_strategy.contentsLost());
     }
     */
-    @Override
-    public void drawImage(Image image, int x, int y, int alpha) {
 
-    }
+    protected void finalDrawImage(Image img, Rect src, Rect dest){
+        //try {
+        drawGraphics();
 
-    @Override
-    public void drawImage(Image image, Rect src, int x, int y, int alpha) {
+        java.awt.Image im = ((PCImage) img).get_image();
 
-    }
+        if(im != null)
+            _graphics.drawImage(im, dest.get_left(), dest.get_top(),
+                    dest.get_right(), dest.get_bottom(),
+                    src.get_left(), src.get_top(), src.get_left() + src.get_right(),
+                    src.get_top() + src.get_bottom(), null);
 
-    @Override
-    public void drawImage(Image image, Rect src, Rect dest, int alpha) {
-
-    }
-
-    public void drawImage(Image image) {
-
+        //}
+        showGraphics();
+       // catch(Exception e){System.out.println(e + " No se ha podido dibujar la imagen.");}
     }
 
     @Override
     public int getWidth() {
-        return xSize;
+        return _width;
     }
 
     @Override
     public int getHeight() {
-        return ySize;
+        return _height;
     }
 }

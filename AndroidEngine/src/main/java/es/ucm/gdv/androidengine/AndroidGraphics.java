@@ -101,13 +101,13 @@ public class AndroidGraphics extends RescaleGraphics {
      */
     @Override
     protected void finalDrawImage(Image img, Rect dest, Rect src){
-        android.graphics.Rect aDest = new android.graphics.Rect(
+        android.graphics.Rect aSrc = new android.graphics.Rect(
                 dest.get_left(),dest.get_top(),dest.get_right(), dest.get_bottom());
 
-        android.graphics.Rect aSrc = new android.graphics.Rect(
+        android.graphics.Rect aDest = new android.graphics.Rect(
                 src.get_left(), src.get_top(), src.get_right(), src.get_bottom());
 
-        _canvas.drawBitmap(((AndroidImage)img).getBitmap(), aDest, aSrc, null);
+        _canvas.drawBitmap(((AndroidImage)img).getBitmap(), aSrc, aDest, null);
     } //finalDrawImage
 
 

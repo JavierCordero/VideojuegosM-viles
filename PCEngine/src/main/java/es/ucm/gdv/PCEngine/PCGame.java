@@ -11,8 +11,9 @@ public class PCGame implements Game {
     PCInput _input;
     LogicInterface _logic;
 
-    public PCGame(LogicInterface logic){
-        _graphics = new PCGraphics();
+    public PCGame(LogicInterface logic, int width, int height){
+
+        _graphics = new PCGraphics(width, height);
         _input = new PCInput();
         _logic = logic;
         _logic.init(this);
@@ -24,7 +25,6 @@ public class PCGame implements Game {
 
     public void update(float deltaTime){
         _logic.update(deltaTime);
-
     }
 
     public void render(){

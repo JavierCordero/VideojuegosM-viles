@@ -11,7 +11,9 @@ public class PCLaucher extends JFrame {
 
     public static void main(String[] arg){
 
-        PCGame game = new PCGame(new Logic());
+        int _width = 800, _height = 600;
+
+        PCGame game = new PCGame(new Logic(), _width, _height);
 
     }
 }

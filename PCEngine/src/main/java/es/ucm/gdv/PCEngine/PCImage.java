@@ -10,7 +10,9 @@ public class PCImage implements Image {
     public PCImage(String name){
         name ="PCLauncher/src/main/assets/" + name;
         try {
-            javax.imageio.ImageIO.read(new java.io.File(name));
+            _image = javax.imageio.ImageIO.read(new java.io.File(name));
+            _width = _image.getWidth(null);
+            _height = _image.getHeight(null);
         }
         catch (Exception e) {
             System.err.println(e + " PCImage unable to load the image with name " + "'" + name + "'");
@@ -25,5 +27,9 @@ public class PCImage implements Image {
     @Override
     public int getHeight() {
         return _height;
+    }
+
+    public java.awt.Image get_image(){
+        return _image;
     }
 }
