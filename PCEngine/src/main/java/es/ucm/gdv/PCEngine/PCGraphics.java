@@ -3,12 +3,13 @@ package es.ucm.gdv.PCEngine;
 import es.ucm.gdv.engine.Graphics;
 import es.ucm.gdv.engine.Image;
 import es.ucm.gdv.engine.Rect;
+import es.ucm.gdv.engine.RescaleGraphics;
 import es.ucm.gdv.engine.Sprite;
 import java.awt.image.*;
 import javax.swing.JFrame;
 import java.awt.*;
 
-public class PCGraphics implements Graphics {
+public class PCGraphics extends RescaleGraphics {
 
     int xSize = 800, ySize = 600;
     public class Ventana extends JFrame {
@@ -100,10 +101,9 @@ public class PCGraphics implements Graphics {
        return _image;
     }
 
-    @Override
-    public Sprite createSprite(Image img, Rect src) {
-        return null;
-    }
+    //public Sprite createSprite(Image img, Rect src) {
+        //return null;
+    //}
 
     @Override
     public void clear(int color) {

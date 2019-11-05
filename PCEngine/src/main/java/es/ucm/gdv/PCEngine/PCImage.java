@@ -8,11 +8,12 @@ public class PCImage implements Image {
     java.awt.Image _image;
 
     public PCImage(String name){
+        name ="PCLauncher/src/main/assets/" + name;
         try {
             javax.imageio.ImageIO.read(new java.io.File(name));
         }
         catch (Exception e) {
-            System.err.println(e);
+            System.err.println(e + " PCImage unable to load the image with name " + "'" + name + "'");
         }
     }
 

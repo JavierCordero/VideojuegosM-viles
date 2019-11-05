@@ -41,13 +41,11 @@ public class PCGame implements Game {
         return null;
     }
 
-    @Override
     public int getScreenWidth() {
-        return 0;
+        return _graphics.getWidth();
     }
 
-    @Override
     public int getScreenHeight() {
-        return 0;
+        return _graphics.getHeight();
     }
 }
