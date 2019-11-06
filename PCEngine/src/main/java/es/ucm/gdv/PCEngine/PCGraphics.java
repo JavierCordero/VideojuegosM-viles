@@ -5,20 +5,21 @@ import es.ucm.gdv.engine.Image;
 import es.ucm.gdv.engine.Rect;
 import es.ucm.gdv.engine.RescaleGraphics;
 import es.ucm.gdv.engine.Sprite;
+
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 import java.awt.image.*;
 import javax.swing.JFrame;
-import javax.swing.JPanel;
 import java.awt.*;
 
 public class PCGraphics extends RescaleGraphics {
 
     int _width, _height;
+    int _logicalWidth = 1080, _logicalHeight = 1920;
     public class Ventana extends JFrame {
 
 
         PCGraphics _graphics;
-        JPanel panel;
-
         /**
          * Constructor.
          *
@@ -45,6 +46,14 @@ public class PCGraphics extends RescaleGraphics {
             setSize(_width, _height);
             setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
             //_graphics = new PCGraphics(ventana);
+
+            addComponentListener(new ComponentAdapter()
+            {
+                public void componentResized(ComponentEvent evt) {
+                    Component c = (Component)evt.getSource();
+                    setLogicalScale(_logicalWidth, _logicalHeight, c.getSize().width, c.getSize().height);
+                }
+            });
 
             return true;
         } //  init
@@ -112,13 +121,22 @@ public class PCGraphics extends RescaleGraphics {
     @Override
     public void clear(int color) {
 
-        drawGraphics();
+        do {
+            do {
+                _graphics = _strategy.getDrawGraphics();
+                try {
+                    Color c = new Color(color);
+                    _graphics.setColor(c);
+                    _graphics.fillRect(0, 0, getWidth(), getHeight());
+                }
+                finally {
+                    _graphics.dispose();
+                }
+            } while(_strategy.contentsRestored());
+            _strategy.show();
+        } while(_strategy.contentsLost());
 
-        Color c = new Color(color);
-        _graphics.setColor(c);
-        _graphics.fillRect(0, 0, getWidth(), getHeight());
 
-        showGraphics();
 
     }
 
@@ -148,20 +166,25 @@ public class PCGraphics extends RescaleGraphics {
     */
 
     protected void finalDrawImage(Image img, Rect src, Rect dest){
-        //try {
-        drawGraphics();
 
-        java.awt.Image im = ((PCImage) img).get_image();
+        do {
+            do {
+                _graphics = _strategy.getDrawGraphics();
+                try {
+                    java.awt.Image im = ((PCImage) img).get_image();
 
-        if(im != null)
-            _graphics.drawImage(im, dest.get_left(), dest.get_top(),
-                    dest.get_right(), dest.get_bottom(),
-                    src.get_left(), src.get_top(), src.get_left() + src.get_right(),
-                    src.get_top() + src.get_bottom(), null);
-
-        //}
-        showGraphics();
-       // catch(Exception e){System.out.println(e + " No se ha podido dibujar la imagen.");}
+                    if(im != null)
+                        _graphics.drawImage(im, dest.get_left(), dest.get_top(),
+                                dest.get_right(), dest.get_bottom(),
+                                src.get_left(), src.get_top(), src.get_left() + src.get_right(),
+                                src.get_top() + src.get_bottom(), null);
+                }
+                finally {
+                    _graphics.dispose();
+                }
+            } while(_strategy.contentsRestored());
+            _strategy.show();
+        } while(_strategy.contentsLost());
     }
 
     @Override
