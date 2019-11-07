@@ -59,9 +59,17 @@ public class PCGraphics extends RescaleGraphics {
         } //  init
     }
 
-    BufferStrategy _strategy;
     Ventana _ventana;
-    java.awt.Graphics _graphics;
+    BufferStrategy _strategy;
+    java.awt.Graphics _awtGraphics;
+
+    public BufferStrategy getBufferStrategy(){
+        return _strategy;
+    }
+
+    void setGraphics(java.awt.Graphics g){
+        _awtGraphics = g;
+    }
 
     public PCGraphics(int width, int height){
         super(width, height);
@@ -121,79 +129,20 @@ public class PCGraphics extends RescaleGraphics {
     @Override
     public void clear(int color) {
 
-        do {
-            do {
-                _graphics = _strategy.getDrawGraphics();
-                try {
-                    Color c = new Color(color);
-                    _graphics.setColor(c);
-                    _graphics.fillRect(0, 0, getWidth(), getHeight());
-                }
-                finally {
-                    _graphics.dispose();
-                }
-            } while(_strategy.contentsRestored());
-            _strategy.show();
-        } while(_strategy.contentsLost());
-
-
-
+        Color c = new Color(color);
+        _awtGraphics.setColor(c);
+        _awtGraphics.fillRect(0, 0, getPhysicalWidth(), getPhysicalHeight());
     }
 
-    private void drawGraphics(){
-        _graphics = _strategy.getDrawGraphics();
-    }
-
-    private void showGraphics(){
-        _graphics.dispose();
-        _strategy.show();
-    }
-
-   /* public void draw(){
-        do {
-            do {
-                _graphics = _strategy.getDrawGraphics();
-                try {
-
-                }
-                finally {
-                    _graphics.dispose();
-                }
-            } while(_strategy.contentsRestored());
-            _strategy.show();
-        } while(_strategy.contentsLost());
-    }
-    */
-
+    @Override
     protected void finalDrawImage(Image img, Rect src, Rect dest){
 
-        do {
-            do {
-                _graphics = _strategy.getDrawGraphics();
-                try {
-                    java.awt.Image im = ((PCImage) img).get_image();
+        java.awt.Image im = ((PCImage) img).get_image();
 
-                    if(im != null)
-                        _graphics.drawImage(im, dest.get_left(), dest.get_top(),
-                                dest.get_right(), dest.get_bottom(),
-                                src.get_left(), src.get_top(), src.get_left() + src.get_right(),
-                                src.get_top() + src.get_bottom(), null);
-                }
-                finally {
-                    _graphics.dispose();
-                }
-            } while(_strategy.contentsRestored());
-            _strategy.show();
-        } while(_strategy.contentsLost());
-    }
-
-    @Override
-    public int getWidth() {
-        return _width;
-    }
-
-    @Override
-    public int getHeight() {
-        return _height;
+        if(im != null)
+            _awtGraphics.drawImage(im, dest.get_left(), dest.get_top(),
+                    dest.get_right(), dest.get_bottom(),
+                    src.get_left(), src.get_top(),src.get_right(),
+                    src.get_bottom(), null);
     }
 }

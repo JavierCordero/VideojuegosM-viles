@@ -86,16 +86,24 @@ public abstract class RescaleGraphics implements Graphics {
     //ESTOS METODOS DEBERAN IMPLEMENTARSE AQUI LUEGO CON EL ESCALADO
     @Override
     public int getWidth() {
-        return _screenWidth;
+        return LogicalWidth;
     }
 
     @Override
     public int getHeight() {
-        return _screenHeight;
+        return LogicalHeight;
     }
 
-    protected void finalDrawImage(Image img, Rect dest, Rect src){
-    } //finalDrawImage
+    //ESTOS METODOS DEBERAN IMPLEMENTARSE AQUI LUEGO CON EL ESCALADO
+    @Override
+    public int getPhysicalWidth() {
+        return _screenWidth;
+    }
+
+    @Override
+    public int getPhysicalHeight() { return _screenHeight; }
+
+    abstract protected void finalDrawImage(Image img, Rect dest, Rect src);
 
     /**
      * Establece los nuevos parametros de pantalla

@@ -1,5 +1,7 @@
 package es.ucm.gdv.PCEngine;
 
+import java.awt.image.BufferStrategy;
+
 import es.ucm.gdv.engine.Game;
 import es.ucm.gdv.engine.Graphics;
 import es.ucm.gdv.engine.Input;
@@ -11,6 +13,9 @@ public class PCGame implements Game {
     PCInput _input;
     LogicInterface _logic;
 
+    BufferStrategy _strategy;
+    java.awt.Graphics _awtGraphics;
+
     public PCGame(LogicInterface logic, int width, int height){
 
         _graphics = new PCGraphics(width, height);
@@ -19,6 +24,7 @@ public class PCGame implements Game {
         _logic.init(this);
 
         while(true){
+            update(1); //Hay que cambiarlo evidentemente
             render();
         }
     }
@@ -28,7 +34,22 @@ public class PCGame implements Game {
     }
 
     public void render(){
-        _logic.render();
+
+        _strategy = _graphics.getBufferStrategy();
+
+        do {
+            do {
+                _awtGraphics = _strategy.getDrawGraphics();
+                _graphics.setGraphics(_awtGraphics);
+                try {
+                    _logic.render();
+                }
+                finally {
+                    _awtGraphics.dispose();
+                }
+            } while(_strategy.contentsRestored());
+            _strategy.show();
+        } while(_strategy.contentsLost());
     }
 
     @Override

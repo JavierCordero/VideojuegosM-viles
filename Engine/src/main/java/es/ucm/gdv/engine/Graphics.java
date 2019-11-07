@@ -8,4 +8,6 @@ public interface Graphics {
     public void drawImage(Image image, Rect src, Rect dest, int alpha);
     public int getWidth();
     public int getHeight();
+    public int getPhysicalWidth();
+    public int getPhysicalHeight();
 }
