@@ -22,6 +22,14 @@ public class AndroidGame implements Game {
     GameFlow _gameFlow;
     LogicInterface _logic;
 
+    /**
+     * Constructora de los parametros iniciales asi como la hebra de juego
+     *
+     * @param ac La activiadad en ejecucion
+     * @param logic La logica de juego que va a actualizar
+     * @param screenWidth Ancho del dispositivo
+     * @param screenHeight Alto del dispositivo
+     */
     public AndroidGame(AppCompatActivity ac, LogicInterface logic, int screenWidth, int screenHeight){
         _gameFlow = new GameFlow(ac);
         _graphics = new AndroidGraphics(_gameFlow, ac.getAssets(), screenWidth, screenHeight);
@@ -30,21 +38,45 @@ public class AndroidGame implements Game {
         _logic.init(this);
     }
 
+    /**
+     * Modifica los valores de ancho y alto tanto logicos como fisicos
+     * para ajustar el escalado de los objetos con el cambio de pantalla
+     *
+     * @param LogicalW Nuevo ancho logico
+     * @param LogicalH Nuevo alto logico
+     * @param screenW Nuevo ancho fisico
+     * @param screenH Nuevo alto fisico
+     */
     public void ScreenOrientation(int LogicalW, int LogicalH, int screenW, int screenH){
         ((RescaleGraphics)_graphics).setLogicalScale(LogicalW, LogicalH, screenW, screenH);
     }
 
+    /**
+     * Devuelve la clase que gestiona la parte grafica del juego
+     *
+     * @return Android Graphics
+     */
     @Override
     public Graphics getGraphics() {
         return _graphics;
     }
 
+    /**
+     * Devuelve la clase que gestiona el input del juego
+     *
+     * @return Android Input
+     */
     @Override
     public Input getInput() {
         return _input;
     }
 
-
+    /**
+     * No es que el juego tenga todo el swing
+     * sino que devuelve la hebra de flujo de juego
+     *
+     * @return devuelve el flujo de juego
+     */
     public GameFlow getGameFlow() { return _gameFlow; }
 
     public class GameFlow extends SurfaceView implements Runnable{
@@ -74,7 +106,10 @@ public class AndroidGame implements Game {
             }
         }
 
-        //Ciclo de vida: el bucle principal debe ser parado temporalmente
+        /**
+         * Pausa el bucle principal
+         */
+
         public void pause(){
             _running = false;
             // Esperar a que termine.
@@ -88,12 +123,18 @@ public class AndroidGame implements Game {
             }
         }   // pause
 
-        // Actualiza la lógica
+        /**
+         * Actualiza la logica
+         * @param deltaTime Tiempo entre frame y frame
+         */
         public void update(float deltaTime){
             //Llama al update de la logica
             _logic.update(deltaTime);
         }
 
+        /**
+         * realiza un "resent" por pantalla
+         */
         public void render(){
             //Llama al render de la logica
             while (!getHolder().getSurface().isValid())
@@ -103,6 +144,9 @@ public class AndroidGame implements Game {
             _graphics.freeCanvas();
         }
 
+        /**
+         * Metodo que ejecutará la hebra principal del juego
+         */
         public void run(){
 
             if (_renderThread != Thread.currentThread()) {
@@ -127,6 +171,9 @@ public class AndroidGame implements Game {
 
         }
 
+        /**
+         * actualiza el deltaTime
+         */
         public void deltaTime(){
             long currentTime = System.nanoTime();
             long nanoElapsedTime = currentTime - lastFrameTime;
