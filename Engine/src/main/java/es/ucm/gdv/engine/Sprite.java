@@ -4,6 +4,7 @@ public class Sprite {
 
     Image _image;
     Rect _rectSrc;
+    Rect _rectDest;
 
 
     /**
@@ -29,6 +30,10 @@ public class Sprite {
         _rectSrc = src;
     }
 
+    public void set_destRect(Rect rectDest){
+        _rectDest = rectDest;
+    }
+
     public int getSpriteWidth(){
         return _rectSrc._right;
     }
@@ -37,6 +42,9 @@ public class Sprite {
         return _rectSrc._bottom;
     }
 
+    public Rect get_destRect(){
+        return _rectDest;
+    }
 
     public void draw(Graphics g, Rect dest){
         g.drawImage(_image, _rectSrc,dest, 255);

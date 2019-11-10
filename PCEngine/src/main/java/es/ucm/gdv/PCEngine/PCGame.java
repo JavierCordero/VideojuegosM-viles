@@ -59,7 +59,7 @@ public class PCGame implements Game {
 
     @Override
     public Input getInput() {
-        return null;
+        return _input;
     }
 
     public int getScreenWidth() {

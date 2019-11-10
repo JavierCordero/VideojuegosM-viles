@@ -29,20 +29,20 @@ public class PCInput extends AbstractInput {
         @Override
         public void mouseClicked(java.awt.event.MouseEvent mouseEvent) {
 
-            TouchEvent t = new TouchEvent();
+         /*   TouchEvent t = new TouchEvent();
             t.set_event(EventType.TOUCH);
             t.set_x(mouseEvent.getX());
             t.set_y(mouseEvent.getY());
             t.set_fingerID(mouseEvent.getID());
 
             TouchEvent r = new TouchEvent();
-            r.set_event(EventType.TOUCH);
+            r.set_event(EventType.RELEASE);
             r.set_x(mouseEvent.getX());
             r.set_y(mouseEvent.getY());
             r.set_fingerID(mouseEvent.getID());
 
             addEvent(t);
-            addEvent(r);
+            addEvent(r);*/
         }
 
         @Override
@@ -59,7 +59,7 @@ public class PCInput extends AbstractInput {
         @Override
         public void mouseReleased(java.awt.event.MouseEvent mouseEvent) {
             TouchEvent t = new TouchEvent();
-            t.set_event(EventType.TOUCH);
+            t.set_event(EventType.RELEASE);
             t.set_x(mouseEvent.getX());
             t.set_y(mouseEvent.getY());
             t.set_fingerID(mouseEvent.getID());
