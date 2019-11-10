@@ -4,7 +4,7 @@ import java.util.List;
 
 public interface Input {
 
-    enum EventType{ TOUCH, RELEASE, SLIDE };
+    public enum EventType{ TOUCH, RELEASE, SLIDE };
     public List<TouchEvent> getTouchEvents();
 
     class TouchEvent{

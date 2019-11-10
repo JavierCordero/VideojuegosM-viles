@@ -19,7 +19,7 @@ public class PCGame implements Game {
     public PCGame(LogicInterface logic, int width, int height){
 
         _graphics = new PCGraphics(width, height);
-        _input = new PCInput();
+        _input = new PCInput(_graphics.get_ventana());
         _logic = logic;
         _logic.init(this);
 
