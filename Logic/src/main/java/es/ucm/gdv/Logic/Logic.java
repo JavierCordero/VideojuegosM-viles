@@ -46,7 +46,6 @@ public class Logic implements LogicInterface {
 
     @Override
     public void update(float deltaTime) {
-
     }
 
     @Override

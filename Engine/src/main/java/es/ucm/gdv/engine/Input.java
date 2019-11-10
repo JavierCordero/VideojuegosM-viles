@@ -4,17 +4,10 @@ import java.util.List;
 
 public interface Input {
 
-    enum EventType{ TOUCH, RELEASE, SLIDE };
+    public enum EventType{ TOUCH, RELEASE, SLIDE };
     public List<TouchEvent> getTouchEvents();
 
     class TouchEvent{
-        //CONSTRUCTORA DE TOUCHEVENT
-        public TouchEvent(EventType e, int x, int y, int id){
-            _event = e;
-            _x = x;
-            _y = y;
-            _fingerID = id;
-        }
 
         EventType _event;
 
@@ -36,5 +29,11 @@ public interface Input {
         public int getFingerID() {
             return _fingerID;
         }
+
+        //SETTERS
+        public void set_x(int x){ _x = x; }
+        public void set_y(int y){ _y = y; }
+        public void set_fingerID(int id){ _fingerID = id; }
+        public void set_event(EventType event) { _event = event; }
     } //TouchEvent class
 }//Input interface

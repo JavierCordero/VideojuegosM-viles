@@ -1,4 +1,5 @@
 package es.ucm.gdv.androidengine;
+import android.util.EventLog;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
@@ -8,32 +9,37 @@ import es.ucm.gdv.engine.AbstractInput;
 
 import es.ucm.gdv.engine.Input;
 
-public class AndroidInput extends AbstractInput implements View.OnTouchListener {
+public class AndroidInput extends AbstractInput {
 
-    @Override
-    public boolean onTouch(View view, MotionEvent motionEvent) {
+    AndroidInput(View view){
 
-        int action = motionEvent.getAction() & MotionEvent.ACTION_MASK;
-        TouchEvent tE;
+        view.setOnTouchListener(new View.OnTouchListener() {
 
-        switch (action) {
-            case MotionEvent.ACTION_DOWN:
-                tE  = new TouchEvent(EventType.TOUCH,
-                        (int)motionEvent.getX(motionEvent.getActionIndex()),
-                        (int)motionEvent.getY(motionEvent.getActionIndex()),
-                        motionEvent.getActionIndex());
-                    break;
-            case MotionEvent.ACTION_UP:
-                tE = new TouchEvent(EventType.RELEASE,
-                        (int)motionEvent.getX(motionEvent.getActionIndex()),
-                        (int)motionEvent.getY(motionEvent.getActionIndex()),
-                        motionEvent.getActionIndex());
-                    break ;
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
 
-            case MotionEvent.ACTION_MOVE:
-                    break;
-        }
+                int action = motionEvent.getAction() & MotionEvent.ACTION_MASK;
+                TouchEvent tE = new TouchEvent();
+                tE.set_fingerID(motionEvent.getActionIndex());
+                tE.set_x((int)motionEvent.getX(motionEvent.getActionIndex()));
+                tE.set_y((int)motionEvent.getY(motionEvent.getActionIndex()));
 
-        return false;
+                switch (action) {
+                    case MotionEvent.ACTION_DOWN:
+                        tE.set_event(EventType.TOUCH);
+                        break;
+
+                    case MotionEvent.ACTION_UP:
+                        tE.set_event(EventType.RELEASE);
+                        break;
+
+                    case MotionEvent.ACTION_MOVE:
+                        tE.set_event(EventType.SLIDE);
+                        break;
+                }
+                addEvent(tE);
+                return false;
+            }
+        });
     }
 }
