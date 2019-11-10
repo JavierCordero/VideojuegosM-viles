@@ -33,7 +33,7 @@ public class AndroidGame implements Game {
     public AndroidGame(AppCompatActivity ac, LogicInterface logic, int screenWidth, int screenHeight){
         _gameFlow = new GameFlow(ac);
         _graphics = new AndroidGraphics(_gameFlow, ac.getAssets(), screenWidth, screenHeight);
-        _input = new AndroidInput();
+        _input = new AndroidInput(_graphics._surfaceView);
         _logic = logic;
         _logic.init(this);
     }
