@@ -59,6 +59,10 @@ public class PCGraphics extends RescaleGraphics {
         } //  init
     }
 
+    public Ventana get_ventana(){
+        return _ventana;
+    }
+
     Ventana _ventana;
     BufferStrategy _strategy;
     java.awt.Graphics _awtGraphics;
