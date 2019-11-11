@@ -36,8 +36,9 @@ public class Logic implements LogicInterface {
         playState.init(game);
 
        states.put("playState", playState);
+       states.put("playState2", playState);
 
-       ActualState = states.get("playState");
+       ActualState = states.get("playState2");
     }
 
     public void chState(String stateID){
