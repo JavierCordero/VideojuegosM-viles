@@ -1,6 +1,6 @@
 package es.ucm.gdv.engine;
 
-public abstract class gameState implements LogicInterface {
+public abstract class State implements LogicInterface {
 
     @Override
     public abstract void init(Game game);

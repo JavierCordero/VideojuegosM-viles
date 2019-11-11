@@ -16,6 +16,9 @@ public class PCGame implements Game {
     BufferStrategy _strategy;
     java.awt.Graphics _awtGraphics;
 
+    float deltaTime;
+    long lastFrameTime;
+
     public PCGame(LogicInterface logic, int width, int height){
 
         _graphics = new PCGraphics(width, height);
@@ -23,8 +26,12 @@ public class PCGame implements Game {
         _logic = logic;
         _logic.init(this);
 
+        deltaTime = 0.0f;
+        lastFrameTime = System.nanoTime();
+
         while(true){
-            update(1); //Hay que cambiarlo evidentemente
+            deltaTime(); //Actualizamos el deltaTime
+            update(deltaTime);
             render();
         }
     }
@@ -68,5 +75,15 @@ public class PCGame implements Game {
 
     public int getScreenHeight() {
         return _graphics.getHeight();
+    }
+
+    /**
+     * actualiza el deltaTime
+     */
+    public void deltaTime(){
+        long currentTime = System.nanoTime();
+        long nanoElapsedTime = currentTime - lastFrameTime;
+        lastFrameTime = currentTime;
+        deltaTime = (float) (nanoElapsedTime / 1.0E9);
     }
 }
