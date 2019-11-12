@@ -57,7 +57,7 @@ public class instructionsState extends State {
         if(bacArrowRect.get_top() > G.getHeight())
             backArrow.set_destRect(new Rect(bacArrowRect.get_left(),
                     bacArrowRect.get_right(),
-                    -G.getHeight(),
+                    -bacArrowRect.get_top(),
                     0));
         else {
             backArrow.set_destRect(new Rect(bacArrowRect.get_left(),
@@ -73,7 +73,7 @@ public class instructionsState extends State {
         if(bacArrowRect2.get_top() > G.getHeight())
             backArrow2.set_destRect(new Rect(bacArrowRect2.get_left(),
                     bacArrowRect2.get_right(),
-                    - G.getHeight(),
+                    -bacArrowRect.get_top(),
                     0));
         else {
             backArrow2.set_destRect(new Rect(bacArrowRect2.get_left(),

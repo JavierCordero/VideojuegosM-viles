@@ -16,6 +16,21 @@ import es.ucm.gdv.engine.StatesManager;
 
 public class playState extends State {
 
+    class ball{
+        Sprite _mySprite;
+        public ball(Sprite sprite){
+            _mySprite = sprite;
+        }
+
+        public void changeBallSprite(Sprite newSprite){
+            _mySprite = newSprite;
+        }
+
+        public Sprite getBallSprite(){
+            return _mySprite;
+        }
+    }
+
     Game _game;
     ResourceManager _rM;
 
@@ -34,9 +49,9 @@ public class playState extends State {
 
     int ballsTaken = 1;
 
-    //Queue<Sprite> unusedBlackBalls = new LinkedList<>();
-    //Queue<Sprite> unusedWhiteBalls = new LinkedList<>();
-    //Queue<Sprite> usedBalls= new LinkedList<>();
+    int numBalls = 5;
+
+    ball [] usedBalls = new ball[numBalls]; //= new LinkedList<>();
 
     public playState(StatesManager statesManager, ResourceManager resourceManager){
         _statesManager = statesManager;
@@ -47,45 +62,17 @@ public class playState extends State {
     public void init(Game game) {
         _game = game;
 
-        /*Image balls = _rM.getImage("balls");
+        for(int i = 0; i < numBalls; i++) {
 
-        for(int i = 0; i < 20; i++) {
-            _rM.createSpriteFromImage("balls",
-                    new Rect(0, 1280 / 10, balls.getHeight() / 2, balls.getHeight()),
-                    "blackBall" + i);
-            unusedBlackBalls.add(_rM.getSprite("blackBall" + i));
-        }
-
-        for(int i = 0; i < 20; i++) {
-            _rM.createSpriteFromImage("balls",
-                    new Rect(0, 1280 / 10, balls.getHeight() / 2, balls.getHeight()),
-                    "whiteBall" + i);
-            unusedWhiteBalls.add(_rM.getSprite("whiteBall" + i));
-        }
-
-        for(int i = 0; i < 5; i++) {
-
-            //Random para ver que color de bola sacamos ahora
-            int rnd = (int) (Math.random() * 100) + 1; // end entre 0 y 100
-
-            if(rnd  > 70)
-                cambiaBall();
-
-            Sprite ball;
-
-            if(actualBall == "blackBall") {
-                ball = unusedBlackBalls.remove();
-                usedBalls.add(ball);
-            }
-            else {
-                ball = unusedWhiteBalls.remove();
-                usedBalls.add(ball);
-            }
-            ball.set_destRect(new Rect((game.getGraphics().getWidth() / 2) - ballSize / 2,
+            ball b = new ball(_rM.getSprite("whiteBall"));
+            b = newRandomBall(b);
+            b.getBallSprite().set_destRect(new Rect((game.getGraphics().getWidth() / 2) - ballSize / 2,
                     (game.getGraphics().getWidth() / 2) + ballSize / 2,
                     -(i * ballSeparation)-ballSize,
                     -(i * ballSeparation)));
-        }*/
+
+            usedBalls[i] = b;
+        }
     }
 
     @Override
@@ -125,7 +112,7 @@ public class playState extends State {
         if(bacArrowRect2.get_top() > G.getHeight())
             backArrow2.set_destRect(new Rect(bacArrowRect2.get_left(),
                     bacArrowRect2.get_right(),
-                    - G.getHeight(),
+                    -bacArrowRect.get_top(),
                     0));
         else {
             backArrow2.set_destRect(new Rect(bacArrowRect2.get_left(),
@@ -135,9 +122,9 @@ public class playState extends State {
         }
 
 
-        /*for(int i = 0; i < usedBalls.size(); i++) {
+        for(int i = 0; i < usedBalls.length; i++) {
 
-            Sprite ball = usedBalls.remove();
+            Sprite ball = usedBalls[i].getBallSprite();
             Rect ballRect = ball.get_destRect();
 
             ball.set_destRect(new Rect(ballRect.get_left(), ballRect.get_right(),
@@ -145,33 +132,13 @@ public class playState extends State {
 
             if(ball.get_destRect().get_top() >= G.getHeight() - 1)
             {
-                      //Random para ver que color de bola sacamos ahora
-                int rnd = (int) (Math.random() * 100) + 1; // end entre 0 y 100
-
-                if(rnd  > 70)
-                    cambiaBall();
-
-                Sprite nBall;
-
-                if(actualBall == "blackBall") {
-                    nBall = unusedBlackBalls.remove();
-                    usedBalls.add(nBall);
-                    unusedWhiteBalls.add(ball);
-                }
-                else {
-                    nBall = unusedWhiteBalls.remove();
-                    usedBalls.add(nBall);
-                    unusedBlackBalls.add(ball);
-                }
-
-                nBall.set_destRect(new Rect((G.getWidth() / 2) - ballSize / 2,
+                //Random para ver que color de bola sacamos ahora
+                newRandomBall(usedBalls[i]).getBallSprite().set_destRect(new Rect((G.getWidth() / 2) - ballSize / 2,
                         (G.getWidth() / 2) + ballSize / 2,
                         -ballSize,
                         0 ));
             }
-
-            else usedBalls.add(ball);
-        }*/
+        }
     }
     @Override
     public Boolean render() {
@@ -184,16 +151,12 @@ public class playState extends State {
         Sprite backArrow = _rM.getSprite("BGArrow1");
         backArrow.draw(G, backArrow.get_destRect());
 
-        Sprite backArrow2 = _rM.getSprite("BGArrow2");
-        backArrow2.draw(G, backArrow2.get_destRect());
+        //Sprite backArrow2 = _rM.getSprite("BGArrow2");
+        //backArrow2.draw(G, backArrow2.get_destRect());
 
-        /*for(int i = 0; i < 5; i++) {
-            Sprite ball = usedBalls.remove();
-
-            ball.draw(G, ball.get_destRect());
-
-            usedBalls.add(ball);
-        }*/
+        for(int i = 0; i < numBalls; i++) {
+            usedBalls[i].getBallSprite().draw(G, usedBalls[i].getBallSprite().get_destRect());
+        }
 
         Sprite player = _rM.getSprite(actualPlayer);
 
@@ -215,5 +178,21 @@ public class playState extends State {
     void cambiaBall(){
         if(actualBall == "whiteBall") actualBall = "blackBall";
         else actualBall = "whiteBall";
+    }
+
+    ball newRandomBall(ball b){
+        int rnd = (int) (Math.random() * 100) + 1; // end entre 0 y 100
+
+        if(rnd  > 70)
+            cambiaBall();
+
+        if(actualBall == "blackBall") {
+            b.changeBallSprite(_rM.getSprite("blackBall"));
+        }
+        else {
+            b.changeBallSprite(_rM.getSprite("whiteBall"));
+        }
+
+        return b;
     }
 }

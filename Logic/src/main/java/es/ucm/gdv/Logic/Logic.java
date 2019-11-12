@@ -123,6 +123,16 @@ public class Logic implements LogicInterface {
                     new Rect((1400/10)*i,(1400/10)*(i+1),0,140),
                     buttonsNames[i]);
         }
+
+        Image balls = _rM.getImage("balls");
+
+        _rM.createSpriteFromImage("balls",
+                new Rect(0, 1280 / 10, 0, balls.getHeight() / 2),
+                "whiteBall");
+
+        _rM.createSpriteFromImage("balls",
+                new Rect(0, 1280 / 10, balls.getHeight() / 2, balls.getHeight()),
+                "blackBall");
     }
 
     @Override

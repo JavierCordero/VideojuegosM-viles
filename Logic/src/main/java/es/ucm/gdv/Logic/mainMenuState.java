@@ -12,6 +12,15 @@ import es.ucm.gdv.engine.Sprite;
 import es.ucm.gdv.engine.State;
 import es.ucm.gdv.engine.StatesManager;
 
+/*task copyPNGs(type: Copy){
+    description = "Copy image into assset folder..."
+        from(rootDir){
+            include "sprites/**"
+        }
+
+        into "src/main/assets"
+}*/
+
 public class mainMenuState extends State {
 
     Game _game;
@@ -53,7 +62,7 @@ public class mainMenuState extends State {
         if(bacArrowRect.get_top() > G.getHeight())
             backArrow.set_destRect(new Rect(bacArrowRect.get_left(),
                     bacArrowRect.get_right(),
-                    -G.getHeight(),
+                    -bacArrowRect.get_top() -bacArrowRect.get_bottom(),
                     0));
         else {
             backArrow.set_destRect(new Rect(bacArrowRect.get_left(),
@@ -63,20 +72,20 @@ public class mainMenuState extends State {
         }
 
 
-        Sprite backArrow2 = _rM.getSprite("BGArrow2");
+       /* Sprite backArrow2 = _rM.getSprite("BGArrow2");
         Rect bacArrowRect2 = backArrow2.get_destRect();
 
         if(bacArrowRect2.get_top() > G.getHeight())
             backArrow2.set_destRect(new Rect(bacArrowRect2.get_left(),
                     bacArrowRect2.get_right(),
-                    - G.getHeight(),
+                    -bacArrowRect2.get_top() -bacArrowRect2.get_bottom(),
                     0));
         else {
             backArrow2.set_destRect(new Rect(bacArrowRect2.get_left(),
                     bacArrowRect2.get_right(),
                     bacArrowRect2.get_top() + (int) (BGspeed * deltaTime),
                     bacArrowRect2.get_bottom() + (int) (BGspeed * deltaTime)));
-        }
+        }*/
     }
 
     @Override
