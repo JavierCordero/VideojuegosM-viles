@@ -12,26 +12,26 @@ public class Rect {
      * @param top Coordenada top del
      * @param bottom Coordenada bottom
      */
-     public Rect(int left, int right, int top, int bottom){
+     public Rect(float left, float right, float top, float bottom){
          _left = left;
          _right = right;
          _top = top;
          _bottom = bottom;
      }
 
-     int _left;
-     int _right;
-     int _top;
-     int _bottom;
+    float _left;
+    float _right;
+    float _top;
+    float _bottom;
 
-     public int get_left(){
+     public float get_left(){
          return _left;
      }
-     public int get_right(){ return _right; }
-     public int get_top(){
+     public float get_right(){ return _right; }
+     public float get_top(){
         return _top;
     }
-     public int get_bottom(){
+     public float get_bottom(){
         return _bottom;
     }
 
@@ -51,7 +51,7 @@ public class Rect {
         this._bottom = _bottom;
     }
 
-    public void setPosition(int left, int right, int top, int bottom){
+    public void setPosition(float left, float right, float top, float bottom){
         _left = left;
         _right = right;
         _top = top;

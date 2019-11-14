@@ -51,17 +51,24 @@ public class playState extends State {
 
     int numBalls = 5;
 
+    int prioridad = 0;
+
     ball [] usedBalls = new ball[numBalls]; //= new LinkedList<>();
 
-    public playState(StatesManager statesManager, ResourceManager resourceManager){
+    Graphics _G;
+
+    Logic.BehindBars _Bar;
+
+    public playState(StatesManager statesManager, ResourceManager resourceManager, Logic.BehindBars Bar){
         _statesManager = statesManager;
         _rM = resourceManager;
+        _Bar = Bar;
     }
 
     @Override
     public void init(Game game) {
         _game = game;
-
+        _G = _game.getGraphics();
         for(int i = 0; i < numBalls; i++) {
 
             ball b = new ball(_rM.getSprite("whiteBall"));
@@ -73,6 +80,8 @@ public class playState extends State {
 
             usedBalls[i] = b;
         }
+
+        //colorMatch = (int) (Math.random() * BGcolors.length-1) + 1;
     }
 
     @Override
@@ -90,37 +99,7 @@ public class playState extends State {
 
         Graphics G = _game.getGraphics();
 
-        Sprite backArrow = _rM.getSprite("BGArrow1");
-        Rect bacArrowRect = backArrow.get_destRect();
-
-        if(bacArrowRect.get_top() > G.getHeight())
-            backArrow.set_destRect(new Rect(bacArrowRect.get_left(),
-                    bacArrowRect.get_right(),
-                    -G.getHeight(),
-                    0));
-        else {
-            backArrow.set_destRect(new Rect(bacArrowRect.get_left(),
-                    bacArrowRect.get_right(),
-                    bacArrowRect.get_top() + (int) (BGspeed * deltaTime),
-                    bacArrowRect.get_bottom() + (int) (BGspeed * deltaTime)));
-        }
-
-
-        Sprite backArrow2 = _rM.getSprite("BGArrow2");
-        Rect bacArrowRect2 = backArrow2.get_destRect();
-
-        if(bacArrowRect2.get_top() > G.getHeight())
-            backArrow2.set_destRect(new Rect(bacArrowRect2.get_left(),
-                    bacArrowRect2.get_right(),
-                    -bacArrowRect.get_top(),
-                    0));
-        else {
-            backArrow2.set_destRect(new Rect(bacArrowRect2.get_left(),
-                    bacArrowRect2.get_right(),
-                    bacArrowRect2.get_top() + (int) (BGspeed * deltaTime),
-                    bacArrowRect2.get_bottom() + (int) (BGspeed * deltaTime)));
-        }
-
+        _Bar.draw(deltaTime);
 
         for(int i = 0; i < usedBalls.length; i++) {
 
@@ -143,26 +122,25 @@ public class playState extends State {
     @Override
     public Boolean render() {
 
-        Graphics G = _game.getGraphics();
-        G.clear(0xFF000000);
+
         //_rM.getSprite(BGcolors[colorMatch]).draw(G, new Rect(0,1080,0,1920));
-        _rM.getSprite("redBG").draw(G, new Rect(0,1080,0,1920));
+        _rM.getSprite("redBG").draw(_G, new Rect(0,1080,0,1920));
 
         Sprite backArrow = _rM.getSprite("BGArrow1");
-        backArrow.draw(G, backArrow.get_destRect());
+        backArrow.draw(_G, backArrow.get_destRect());
 
-        //Sprite backArrow2 = _rM.getSprite("BGArrow2");
-        //backArrow2.draw(G, backArrow2.get_destRect());
+        Sprite backArrow2 = _rM.getSprite("BGArrow2");
+        backArrow2.draw(_G, backArrow2.get_destRect());
 
         for(int i = 0; i < numBalls; i++) {
-            usedBalls[i].getBallSprite().draw(G, usedBalls[i].getBallSprite().get_destRect());
+            usedBalls[i].getBallSprite().draw(_G, usedBalls[i].getBallSprite().get_destRect());
         }
 
         Sprite player = _rM.getSprite(actualPlayer);
 
-        player.draw(G,
-                new Rect((G.getWidth()/2)-player.getSpriteWidth()/2,
-                        (G.getWidth()/2)+player.getSpriteWidth()/2,
+        player.draw(_G,
+                new Rect((_G.getWidth()/2)-player.getSpriteWidth()/2,
+                        (_G.getWidth()/2)+player.getSpriteWidth()/2,
                         playerDistanceToTop-player.getSpriteHeight()/2,
                         playerDistanceToTop+player.getSpriteHeight()/2));
         // _resourceManager.getSprite("whitePlayer").draw(_game.getGraphics(),   new Rect(540-264,540+264,1200,1397));

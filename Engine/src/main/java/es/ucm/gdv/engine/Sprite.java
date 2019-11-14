@@ -35,11 +35,11 @@ public class Sprite {
     }
 
     public int getSpriteWidth(){
-        return _rectSrc._right - _rectSrc._left;
+        return (int)_rectSrc._right - (int)_rectSrc._left;
     }
 
     public int getSpriteHeight(){
-        return _rectSrc._bottom - _rectSrc._top;
+        return (int)_rectSrc._bottom - (int)_rectSrc._top;
     }
 
     public Rect get_destRect(){

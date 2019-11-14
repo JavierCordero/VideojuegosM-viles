@@ -144,9 +144,9 @@ public class PCGraphics extends RescaleGraphics {
         java.awt.Image im = ((PCImage) img).get_image();
 
         if(im != null)
-            _awtGraphics.drawImage(im, dest.get_left(), dest.get_top(),
-                    dest.get_right(), dest.get_bottom(),
-                    src.get_left(), src.get_top(),src.get_right(),
-                    src.get_bottom(), null);
+            _awtGraphics.drawImage(im, (int)dest.get_left(), (int)dest.get_top(),
+                    (int)dest.get_right(), (int)dest.get_bottom(),
+                    (int)src.get_left(), (int)src.get_top(),(int)src.get_right(),
+                    (int)src.get_bottom(), null);
     }
 }
