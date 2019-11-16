@@ -22,8 +22,11 @@ public class Logic implements LogicInterface {
     StatesManager _statesManager;
     String[] BGcolors = {"greenBG", "cyanBG", "blueBG", "darkBlueBG", "purpleBG", "greyBG", "orangeBG", "redBG", "browBG"};
     String[] buttonsNames = {"interrogation", "exit", "sound", "mute", "home", "star", "dollar", "settings", "maximize", "shop"};
+    int [] colors = {0xff41a85f, 0xff00a885, 0xff3d8eb9, 0xff2969b0, 0xff553982, 0xff28324e, 0xfff37934, 0xffd14b41, 0xff75706b};
+
 
     int BGspeed = 384;
+    public BehindColor _behindColor;
 
     public class BehindBars{
         int prioridad = 0;
@@ -102,9 +105,12 @@ public class Logic implements LogicInterface {
         }
     }
 
-    public String[] getBGcolors(){
-        return BGcolors;
+    public class BehindColor{
+        int currentColor;
+        public void setCurrentColor(int c){ currentColor  = c;}
+        public String [] getBGcolors(){return BGcolors;}
     }
+
 
     public void init(Game game){
        _game = game;
@@ -114,19 +120,21 @@ public class Logic implements LogicInterface {
 
         BehindBars bars = new BehindBars();
 
+        _behindColor = new BehindColor();
+        _behindColor.currentColor = 0;
        loadImages();
 
        createSprites();
 
        _statesManager = new StatesManager(_game);
 
-       State playState = new playState(_statesManager, _rM, bars);
+       State playState = new playState(_statesManager, _rM, bars, _behindColor);
        _statesManager.addState(playState, "playState");
 
-        State instrState = new instructionsState(_statesManager, _rM, bars);
+        State instrState = new instructionsState(_statesManager, _rM, bars, _behindColor);
         _statesManager.addState(instrState, "instrState");
 
-       State mainMenuState = new mainMenuState(_statesManager, _rM, bars);
+       State mainMenuState = new mainMenuState(_statesManager, _rM, bars, _behindColor);
        _statesManager.addState(mainMenuState, "mainMenuState");
 
        _statesManager.chState("mainMenuState");
@@ -152,28 +160,28 @@ public class Logic implements LogicInterface {
 
         _rM.createSpriteFromImage("tapToPlay",
                 new Rect(0,tapToPlay.getWidth(),0,tapToPlay.getHeight()),
-                "ToPlay");
+                "ToPlay", 255);
 
         Image howToPlay =  _rM.getImage("howToPlay");
 
         _rM.createSpriteFromImage("howToPlay",
                 new Rect(0,howToPlay.getWidth(),0,howToPlay.getHeight()),
-                "howToPlay");
+                "howToPlay", 255);
 
         Image instructions = _rM.getImage("instructions");
 
         _rM.createSpriteFromImage("instructions",
                 new Rect(0,instructions.getWidth(),0,instructions.getHeight()),
-                "instructions");
+                "instructions", 255);
 
         Image flechas = _rM.getImage("arrowsBackground");
 
         _rM.createSpriteFromImage("arrowsBackground",
                 new Rect(0, flechas.getWidth(), 0, flechas.getHeight()),
-                "BGArrow1");
+                "BGArrow1", 128);
         _rM.createSpriteFromImage("arrowsBackground",
                 new Rect(0, flechas.getWidth(), 0, flechas.getHeight()),
-                "BGArrow2");
+                "BGArrow2", 128);
 
         Graphics G = _game.getGraphics();
 
@@ -191,37 +199,37 @@ public class Logic implements LogicInterface {
 
         _rM.createSpriteFromImage("logo",
                 new Rect(0,logo.getWidth(),0,logo.getHeight()),
-                "logo");
+                "logo", 255);
 
         _rM.createSpriteFromImage("players",
                 new Rect(0,528,0,384/2),
-                "whitePlayer");
+                "whitePlayer", 255);
 
         _rM.createSpriteFromImage("players",
                 new Rect(0,528,384/2,384),
-                "blackPlayer");
+                "blackPlayer", 255);
 
         for(int i = 0; i < BGcolors.length; i++){
             _rM.createSpriteFromImage("backgrounds",
                     new Rect((288/9)*i,(288/9)*(i+1),0,32),
-                    BGcolors[i]);
+                    BGcolors[i], 255);
         }
 
         for(int i = 0; i < buttonsNames.length; i++){
             _rM.createSpriteFromImage("buttons",
                     new Rect((1400/10)*i,(1400/10)*(i+1),0,140),
-                    buttonsNames[i]);
+                    buttonsNames[i], 255);
         }
 
         Image balls = _rM.getImage("balls");
 
         _rM.createSpriteFromImage("balls",
                 new Rect(0, 1280 / 10, 0, balls.getHeight() / 2),
-                "whiteBall");
+                "whiteBall", 255);
 
         _rM.createSpriteFromImage("balls",
                 new Rect(0, 1280 / 10, balls.getHeight() / 2, balls.getHeight()),
-                "blackBall");
+                "blackBall", 255);
     }
 
     @Override
@@ -231,7 +239,7 @@ public class Logic implements LogicInterface {
 
     @Override
     public Boolean render() {
-        _G.clear(0xFF000000);
+        _G.clear(colors[_behindColor.currentColor]);
         _statesManager.getActualState().render();
         return true;
     }

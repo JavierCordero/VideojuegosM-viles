@@ -58,11 +58,16 @@ public class playState extends State {
     Graphics _G;
 
     Logic.BehindBars _Bar;
+    Logic.BehindColor _bColor;
 
-    public playState(StatesManager statesManager, ResourceManager resourceManager, Logic.BehindBars Bar){
+    int _myColor;
+
+    public playState(StatesManager statesManager, ResourceManager resourceManager,
+                     Logic.BehindBars Bar, Logic.BehindColor bColor){
         _statesManager = statesManager;
         _rM = resourceManager;
         _Bar = Bar;
+        _bColor = bColor;
     }
 
     @Override
@@ -81,11 +86,13 @@ public class playState extends State {
             usedBalls[i] = b;
         }
 
-        //colorMatch = (int) (Math.random() * BGcolors.length-1) + 1;
+        _myColor = (int) (Math.random() * _bColor.getBGcolors().length-1) + 1;
     }
 
     @Override
     public void update(float deltaTime) {
+
+        _bColor.setCurrentColor(_myColor);
 
         List<Input.TouchEvent> l = _game.getInput().getTouchEvents();
         for(int i = 0; i < l.size(); i++){
@@ -124,7 +131,7 @@ public class playState extends State {
 
 
         //_rM.getSprite(BGcolors[colorMatch]).draw(G, new Rect(0,1080,0,1920));
-        _rM.getSprite("redBG").draw(_G, new Rect(0,1080,0,1920));
+        _rM.getSprite(_bColor.getBGcolors()[_bColor.currentColor]).draw(_G, new Rect(0,1080,0,1920));
 
         Sprite backArrow = _rM.getSprite("BGArrow1");
         backArrow.draw(_G, backArrow.get_destRect());

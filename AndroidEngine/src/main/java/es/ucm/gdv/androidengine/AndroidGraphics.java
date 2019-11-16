@@ -1,6 +1,7 @@
 package es.ucm.gdv.androidengine;
 
 import android.content.res.AssetManager;
+import android.graphics.Paint;
 import android.view.SurfaceView;
 
 import es.ucm.gdv.engine.Graphics;
@@ -100,14 +101,18 @@ public class AndroidGraphics extends RescaleGraphics {
      * @param src Rectangulo fuente donde se va a pintar
      */
     @Override
-    protected void finalDrawImage(Image img, Rect dest, Rect src){
+    protected void finalDrawImage(Image img, Rect dest, Rect src, int alpha){
         android.graphics.Rect aSrc = new android.graphics.Rect(
                 (int)dest.get_left(),(int)dest.get_top(),(int)dest.get_right(), (int)dest.get_bottom());
 
         android.graphics.Rect aDest = new android.graphics.Rect(
                 (int)src.get_left(), (int)src.get_top(), (int)src.get_right(), (int)src.get_bottom());
 
-        _canvas.drawBitmap(((AndroidImage)img).getBitmap(), aSrc, aDest, null);
+
+        Paint paint = new Paint();
+        paint.setAlpha(alpha);
+
+        _canvas.drawBitmap(((AndroidImage)img).getBitmap(), aSrc, aDest, paint);
     } //finalDrawImage
 
 

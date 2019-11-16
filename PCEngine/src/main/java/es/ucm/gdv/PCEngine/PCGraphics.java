@@ -139,14 +139,18 @@ public class PCGraphics extends RescaleGraphics {
     }
 
     @Override
-    protected void finalDrawImage(Image img, Rect src, Rect dest){
+    protected void finalDrawImage(Image img, Rect src, Rect dest, int alpha){
 
         java.awt.Image im = ((PCImage) img).get_image();
 
-        if(im != null)
-            _awtGraphics.drawImage(im, (int)dest.get_left(), (int)dest.get_top(),
-                    (int)dest.get_right(), (int)dest.get_bottom(),
-                    (int)src.get_left(), (int)src.get_top(),(int)src.get_right(),
-                    (int)src.get_bottom(), null);
+        if(im != null) {
+            Graphics2D g = (Graphics2D)_awtGraphics;
+            g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER,
+                    ((float)alpha / (float)255)));
+            g.drawImage(im, (int) dest.get_left(), (int) dest.get_top(),
+                    (int) dest.get_right(), (int) dest.get_bottom(),
+                    (int) src.get_left(), (int) src.get_top(), (int) src.get_right(),
+                    (int) src.get_bottom(), null);
+        }
     }
 }

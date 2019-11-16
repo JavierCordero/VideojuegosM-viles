@@ -55,7 +55,7 @@ public abstract class RescaleGraphics implements Graphics {
         newDest.set_top(newStartTop+(int)(dest.get_top()*ScaleFactor));
         newDest.set_bottom((int)(dest.get_bottom()*ScaleFactor)+newStartTop);
 
-        finalDrawImage(image, src, newDest);
+        finalDrawImage(image, src, newDest, alpha);
     }
 
     /**
@@ -81,7 +81,7 @@ public abstract class RescaleGraphics implements Graphics {
         newDest.set_top(newStartTop+(int)(dest.get_top()*ScaleFactor));
         newDest.set_bottom((int)(dest.get_bottom()*ScaleFactor)+newStartTop);
 
-        finalDrawImage(image, src, newDest);
+        finalDrawImage(image, src, newDest, alpha);
     }
 
     /**
@@ -106,7 +106,7 @@ public abstract class RescaleGraphics implements Graphics {
         newDest.set_top(newStartTop+(int)(dest.get_top()*ScaleFactor));
         newDest.set_bottom((int)(dest.get_bottom()*ScaleFactor)+newStartTop);
 
-        finalDrawImage(image, src, newDest);
+        finalDrawImage(image, src, newDest, alpha);
     }
 
 
@@ -148,7 +148,7 @@ public abstract class RescaleGraphics implements Graphics {
     @Override
     public int getPhysicalHeight() { return _screenHeight; }
 
-    abstract protected void finalDrawImage(Image img, Rect dest, Rect src);
+    abstract protected void finalDrawImage(Image img, Rect dest, Rect src, int alpha);
 
     /**
      * Establece los nuevos parametros de pantalla

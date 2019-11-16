@@ -5,7 +5,7 @@ public class Sprite {
     Image _image;
     Rect _rectSrc;
     Rect _rectDest;
-
+    int _alpha;
 
     /**
      * Constructora de Sprite
@@ -13,9 +13,10 @@ public class Sprite {
      * @param img imagen a dibujar. Puede ser un sritesheet
      * @param src rectangulo que se toma de la imagen para seleccionar el sprite del spritesheet
      */
-    public Sprite(Image img, Rect src){
+    public Sprite(Image img, Rect src, int alpha){
         _image = img;
         _rectSrc = src;
+        _alpha = alpha;
     }
     /**
      * Constructora de Sprite
@@ -25,7 +26,7 @@ public class Sprite {
      * @param x posición x del sprite
      * @param y posición y del sprite
      */
-    public Sprite(Image img, Rect src, int x, int y){
+    public Sprite(Image img, Rect src, int x, int y, int _alpha){
         _image = img;
         _rectSrc = src;
     }
@@ -47,6 +48,6 @@ public class Sprite {
     }
 
     public void draw(Graphics g, Rect dest){
-        g.drawImage(_image, _rectSrc,dest, 255);
+        g.drawImage(_image, _rectSrc,dest, _alpha);
     }
 }
