@@ -137,6 +137,9 @@ public class Logic implements LogicInterface {
        State mainMenuState = new mainMenuState(_statesManager, _rM, bars, _behindColor);
        _statesManager.addState(mainMenuState, "mainMenuState");
 
+       State endState = new endState(_statesManager, _rM, bars, _behindColor);
+        _statesManager.addState(endState, "endState");
+
        _statesManager.chState("mainMenuState");
 
     }
@@ -152,6 +155,9 @@ public class Logic implements LogicInterface {
         _rM.LoadImage("players", _game.getGraphics().newImage("players.png"));
         _rM.LoadImage("balls", _game.getGraphics().newImage("balls.png"));
         _rM.LoadImage("buttons", _game.getGraphics().newImage("buttons.png"));
+        _rM.LoadImage("gameOver", _game.getGraphics().newImage("gameOver.png"));
+        _rM.LoadImage("playAgain", _game.getGraphics().newImage("playAgain.png"));
+        _rM.LoadImage("font", _game.getGraphics().newImage("scoreFont.png"));
     }
 
     void createSprites(){
@@ -230,6 +236,33 @@ public class Logic implements LogicInterface {
         _rM.createSpriteFromImage("balls",
                 new Rect(0, 1280 / 10, balls.getHeight() / 2, balls.getHeight()),
                 "blackBall", 255);
+
+        Image gOver = _rM.getImage("gameOver");
+        _rM.createSpriteFromImage("gameOver", new Rect(0, gOver.getWidth(), 0 , gOver.getHeight()),
+                "gameOver",255);
+
+        Image pAgain = _rM.getImage("playAgain");
+        _rM.createSpriteFromImage("playAgain", new Rect(0, pAgain.getWidth(), 0 , pAgain.getHeight()),
+                "playAgain",255);
+
+
+        //NUMBERS
+        int j = 3;
+        int index = 1;
+        for(int i = 1; i <= 10; i++){
+
+            _rM.createSpriteFromImage("font", new Rect((7 + index - 1) * 125,
+                    ((7 + index - 1) * 125) + 125,
+                            j * 160 ,
+                            (j * 160) + 160),
+                        "number" + ( i - 1)  ,255);
+
+            if(i == 8) {
+                j++;
+                index = 0;
+            }
+        }
+
     }
 
     @Override
@@ -243,6 +276,4 @@ public class Logic implements LogicInterface {
         _statesManager.getActualState().render();
         return true;
     }
-
-
 }

@@ -17,7 +17,12 @@ import es.ucm.gdv.engine.StatesManager;
 public class playState extends State {
 
     class ball{
+        boolean active;
         Sprite _mySprite;
+        String _myColor;
+
+        public void setColor (String c){_myColor = c;}
+
         public ball(Sprite sprite){
             _mySprite = sprite;
         }
@@ -28,6 +33,10 @@ public class playState extends State {
 
         public Sprite getBallSprite(){
             return _mySprite;
+        }
+
+        public String get_myColor(){
+            return _myColor;
         }
     }
 
@@ -40,20 +49,20 @@ public class playState extends State {
     String actualBall = "whiteBall";
 
     //Valores dados en el enunciado
-    int BGspeed = 384;
-    int ballsSpeed = 430;
+    int _originalBallSpeed = 430;
+    int _ballsSpeed;
     int ballSeparation = 395;
     int incrBallSpeed = 90;
     int playerDistanceToTop = 1200;
     int ballSize = 128;
 
-    int ballsTaken = 1;
+    int _ballsTaken;
 
     int numBalls = 5;
 
-    int prioridad = 0;
-
     ball [] usedBalls = new ball[numBalls]; //= new LinkedList<>();
+
+    ball lastBallCreated;
 
     Graphics _G;
 
@@ -61,6 +70,8 @@ public class playState extends State {
     Logic.BehindColor _bColor;
 
     int _myColor;
+
+    int numSprites = 0;
 
     public playState(StatesManager statesManager, ResourceManager resourceManager,
                      Logic.BehindBars Bar, Logic.BehindColor bColor){
@@ -74,19 +85,36 @@ public class playState extends State {
     public void init(Game game) {
         _game = game;
         _G = _game.getGraphics();
+
+        _ballsTaken = 1;
+        _ballsSpeed = _originalBallSpeed;
+
         for(int i = 0; i < numBalls; i++) {
 
             ball b = new ball(_rM.getSprite("whiteBall"));
             b = newRandomBall(b);
-            b.getBallSprite().set_destRect(new Rect((game.getGraphics().getWidth() / 2) - ballSize / 2,
-                    (game.getGraphics().getWidth() / 2) + ballSize / 2,
-                    -(i * ballSeparation)-ballSize,
-                    -(i * ballSeparation)));
-
+            b.active = false;
             usedBalls[i] = b;
         }
 
+        usedBalls[0].active = true;
+        lastBallCreated = usedBalls[0];
+
         _myColor = (int) (Math.random() * _bColor.getBGcolors().length-1) + 1;
+
+        Sprite white = _rM.getSprite("whitePlayer");
+        Sprite black = _rM.getSprite("blackPlayer");
+
+        white.set_destRect(new Rect((_G.getWidth()/2)-white.getSpriteWidth()/2,
+                (_G.getWidth()/2)+white.getSpriteWidth()/2,
+                playerDistanceToTop-white.getSpriteHeight()/2,
+                playerDistanceToTop+white.getSpriteHeight()/2));
+
+        black.set_destRect(new Rect((_G.getWidth()/2)-black.getSpriteWidth()/2,
+                (_G.getWidth()/2)+black.getSpriteWidth()/2,
+                playerDistanceToTop-black.getSpriteHeight()/2,
+                playerDistanceToTop+black.getSpriteHeight()/2));
+
     }
 
     @Override
@@ -100,35 +128,50 @@ public class playState extends State {
             if(event.getEvent() == Input.EventType.TOUCH)
                 cambiaPlayer();
         }
-
-        if(ballsTaken % 11 == 0)
-            ballsSpeed += incrBallSpeed;
-
-        Graphics G = _game.getGraphics();
-
         _Bar.draw(deltaTime);
 
         for(int i = 0; i < usedBalls.length; i++) {
 
-            Sprite ball = usedBalls[i].getBallSprite();
-            Rect ballRect = ball.get_destRect();
+            if(usedBalls[i].active){
+                Sprite ball = usedBalls[i].getBallSprite();
+                Rect ballRect = ball.get_destRect();
 
-            ball.set_destRect(new Rect(ballRect.get_left(), ballRect.get_right(),
-                    ballRect.get_top() + (int) (ballsSpeed * deltaTime), ballRect.get_bottom() + (int) (ballsSpeed * deltaTime)));
+                ball.set_destRect(new Rect(ballRect.get_left(), ballRect.get_right(),
+                    ballRect.get_top() + (int) (_ballsSpeed * deltaTime),
+                        ballRect.get_bottom() + (int) (_ballsSpeed * deltaTime)));
 
-            if(ball.get_destRect().get_top() >= G.getHeight() - 1)
-            {
-                //Random para ver que color de bola sacamos ahora
-                newRandomBall(usedBalls[i]).getBallSprite().set_destRect(new Rect((G.getWidth() / 2) - ballSize / 2,
-                        (G.getWidth() / 2) + ballSize / 2,
-                        -ballSize,
-                        0 ));
+                if(ball.get_destRect().get_bottom() >= _G.getHeight())
+                {
+                    //el juego ha acabado has perdido
+                    endState s = (endState)_statesManager.get_state_by_name("endState");
+                    s.setScore(_ballsTaken - 1);
+                    _statesManager.chState("endState");
+                }
+
+                else if(ball.get_destRect().get_bottom() >= _rM.getSprite(actualPlayer).get_destRect().get_top()
+                && ball.get_destRect().get_bottom() < _rM.getSprite(actualPlayer).get_destRect().get_bottom()
+                && actualPlayer == usedBalls[i].get_myColor()){
+                    usedBalls[i].active = false;
+                    _ballsTaken++;
+
+                    if(_ballsTaken % 11 == 0)
+                        _ballsSpeed += incrBallSpeed;
+                }
+
+                if(lastBallCreated.getBallSprite().get_destRect().get_top() >= ballSeparation){
+                    ball b = firstUnusedBall();
+                    newRandomBall(b).getBallSprite().set_destRect(new Rect((_G.getWidth() / 2) - ballSize / 2,
+                            (_G.getWidth() / 2) + ballSize / 2,
+                            -ballSize,
+                            0 ));
+                    b.active = true;
+                    lastBallCreated = b;
+                }
             }
         }
     }
     @Override
     public Boolean render() {
-
 
         //_rM.getSprite(BGcolors[colorMatch]).draw(G, new Rect(0,1080,0,1920));
         _rM.getSprite(_bColor.getBGcolors()[_bColor.currentColor]).draw(_G, new Rect(0,1080,0,1920));
@@ -140,16 +183,13 @@ public class playState extends State {
         backArrow2.draw(_G, backArrow2.get_destRect());
 
         for(int i = 0; i < numBalls; i++) {
-            usedBalls[i].getBallSprite().draw(_G, usedBalls[i].getBallSprite().get_destRect());
+            if(usedBalls[i].active)
+                usedBalls[i].getBallSprite().draw(_G, usedBalls[i].getBallSprite().get_destRect());
         }
 
         Sprite player = _rM.getSprite(actualPlayer);
 
-        player.draw(_G,
-                new Rect((_G.getWidth()/2)-player.getSpriteWidth()/2,
-                        (_G.getWidth()/2)+player.getSpriteWidth()/2,
-                        playerDistanceToTop-player.getSpriteHeight()/2,
-                        playerDistanceToTop+player.getSpriteHeight()/2));
+        player.draw(_G,player.get_destRect());
         // _resourceManager.getSprite("whitePlayer").draw(_game.getGraphics(),   new Rect(540-264,540+264,1200,1397));
 
         return true;
@@ -165,18 +205,44 @@ public class playState extends State {
         else actualBall = "whiteBall";
     }
 
+    ball firstUnusedBall(){
+        int i;
+        for(i = 0; i < usedBalls.length - 1; i++){
+            if(!usedBalls[i].active)
+                break;
+        }
+        return usedBalls[i];
+    }
+
     ball newRandomBall(ball b){
         int rnd = (int) (Math.random() * 100) + 1; // end entre 0 y 100
 
         if(rnd  > 70)
             cambiaBall();
 
+        Image balls = _rM.getImage("balls");
+
+
         if(actualBall == "blackBall") {
-            b.changeBallSprite(_rM.getSprite("blackBall"));
+
+             _rM.createSpriteFromImage("balls",
+                    new Rect(0, 1280 / 10, 0, balls.getHeight() / 2), "blackBall" + numSprites, 255);
+            Sprite s = _rM.getSprite("blackBall" + numSprites);
+            b.changeBallSprite(s);
+            b.setColor("whitePlayer");
         }
         else {
-            b.changeBallSprite(_rM.getSprite("whiteBall"));
+            _rM.createSpriteFromImage("balls",
+                    new Rect(0, 1280 / 10, balls.getHeight() / 2, balls.getHeight()), "whiteBall" + numSprites, 255);
+            Sprite s = _rM.getSprite("whiteBall" + numSprites);
+            b.changeBallSprite(s);
+            b.setColor("blackPlayer");
         }
+
+        b.getBallSprite().set_destRect(new Rect((_G.getWidth() / 2) - ballSize / 2,
+                (_G.getWidth() / 2) + ballSize / 2,
+                -ballSize,
+                0 ));
 
         return b;
     }

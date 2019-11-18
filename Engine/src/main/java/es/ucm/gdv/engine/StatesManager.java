@@ -13,13 +13,22 @@ public class StatesManager {
     }
 
     public void addState(State s, String name){
-        s.init(_game);
         states.put(name, s);
     }
 
     public void chState(String stateID){
-        if(states.containsKey(stateID))
+        if(states.containsKey(stateID)){
             _actualState = states.get(stateID);
+            _actualState.init(_game);
+        }
+    }
+
+    public State get_state_by_name(String stateID){
+        if(states.containsKey(stateID)){
+            return states.get(stateID);
+        }
+
+        else return null;
     }
 
     public State getActualState(){

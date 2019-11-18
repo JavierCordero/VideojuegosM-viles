@@ -63,21 +63,18 @@ public class mainMenuState extends State {
                 _statesManager.chState("instrState");
         }
 
-        Graphics G = _game.getGraphics();
-
         _Bar.draw(deltaTime);
     }
 
     @Override
     public Boolean render() {
-
-        //_rM.getSprite(BGcolors[colorMatch]).draw(G, new Rect(0,1080,0,1920));
         _rM.getSprite(_bColor.getBGcolors()[_bColor.currentColor]).draw(_G, new Rect(0,1080,0,1920));
 
         Sprite backArrow = _rM.getSprite("BGArrow1");
         backArrow.draw(_G, backArrow.get_destRect());
 
         Sprite backArrow2 = _rM.getSprite("BGArrow2");
+
         backArrow2.draw(_G, backArrow2.get_destRect());
 
         Sprite logo = _rM.getSprite("logo");
@@ -93,6 +90,9 @@ public class mainMenuState extends State {
                 (_G.getWidth()/2)+tapToPlay.getSpriteWidth()/2
                     ,tapToPlayY,
                 tapToPlayY + tapToPlay.getSpriteHeight()));
+
+        Sprite number = _rM.getSprite("number7");
+        number.draw(_G, new Rect(100,number.getSpriteWidth() + 100,0,number.getSpriteHeight() + 100));
 
         return true;
     }
