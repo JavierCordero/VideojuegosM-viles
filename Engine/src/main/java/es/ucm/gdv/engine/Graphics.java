@@ -3,6 +3,7 @@ package es.ucm.gdv.engine;
 public interface Graphics {
     public Image newImage(String name);
     public void clear(int Color);
+    public void drawColor(int Color, Rect dest);
     public void drawImage(Image image, int x, int y, int alpha);
     public void drawImage(Image image, Rect src, int x, int y, int alpha);
     public void drawImage(Image image, Rect src, Rect dest, int alpha);

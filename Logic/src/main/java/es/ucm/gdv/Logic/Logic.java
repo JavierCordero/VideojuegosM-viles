@@ -264,6 +264,25 @@ public class Logic implements LogicInterface {
             }
         }
 
+        //LETTERS
+        j = 0;
+        index = 0;
+        int letter = 97; //ascii de la a
+        for(int i = 0; i < 26; i++){
+
+            _rM.createSpriteFromImage("font", new Rect(index * 125,
+                            ( index * 125) + 125,
+                            j * 160 ,
+                            (j * 160) + 160),
+                    "letra" + (char)letter  ,255);
+
+            index++;
+            letter++;
+            if(i ==14) {
+                j++;
+                index = 0;
+            }
+        }
     }
 
     @Override
@@ -273,7 +292,11 @@ public class Logic implements LogicInterface {
 
     @Override
     public Boolean render() {
-        _G.clear(colors[_behindColor.currentColor]);
+        _G.clear(0xFF000000); // Color negro para las bandas negras laterales.
+
+        Rect r = new Rect(0, _G.getWidth(), 0, _G.getHeight());
+        _G.drawColor(colors[_behindColor.currentColor], r); //Va a fallar aqui, hay que implementarlo en android
+
         _statesManager.getActualState().render();
         return true;
     }

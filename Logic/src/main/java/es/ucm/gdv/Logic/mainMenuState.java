@@ -90,7 +90,6 @@ public class mainMenuState extends State {
                 (_G.getWidth()/2)+tapToPlay.getSpriteWidth()/2
                     ,tapToPlayY,
                 tapToPlayY + tapToPlay.getSpriteHeight()));
-
         return true;
     }
 }

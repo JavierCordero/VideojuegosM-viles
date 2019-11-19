@@ -138,6 +138,12 @@ public class PCGraphics extends RescaleGraphics {
         _awtGraphics.fillRect(0, 0, getPhysicalWidth(), getPhysicalHeight());
     }
 
+    public void drawColor(int color, Rect dest){
+        Color c = new Color(color);
+        _awtGraphics.setColor(c);
+        _awtGraphics.fillRect((int)dest.get_left(), (int)dest.get_right(), (int)dest.get_top(), (int)dest.get_bottom());
+    }
+
     @Override
     protected void finalDrawImage(Image img, Rect src, Rect dest, int alpha){
 

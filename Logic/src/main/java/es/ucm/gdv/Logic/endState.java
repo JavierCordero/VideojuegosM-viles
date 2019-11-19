@@ -66,7 +66,7 @@ public class endState extends State {
         for(int i = 0; i < l.size(); i++){
             Input.TouchEvent event = l.get(i);
             if(event.getEvent() == Input.EventType.TOUCH)
-                _statesManager.chState("mainMenuState");
+                _statesManager.chState("playState");
         }
 
         _Bar.draw(deltaTime);
@@ -88,16 +88,48 @@ public class endState extends State {
         Sprite pAgain = _rM.getSprite("playAgain");
         pAgain.draw(_G, pAgain.get_destRect());
 
+
+        //Score
         int n =(int)(_score) / 100;
         drawNumber(n, -2);
 
         n = (_score) % 100 / 10;
         drawNumber(n, -1);
 
-
         n = (_score) % 100 % 10;
         if(n == 10) n = 0;
         drawNumber(n, 0);
+
+        //Points
+        Sprite letter = _rM.getSprite("letrap");
+        letter.draw(_G, new Rect(_G.getWidth() / 2 - 3 * numbersSeparation,
+                _G.getWidth() / 2 + numbers[n].getSpriteWidth() - 3 * numbersSeparation,
+                numbersHeight + 200,numbersHeight + 300));
+
+        letter = _rM.getSprite("letrao");
+        letter.draw(_G, new Rect(_G.getWidth() / 2 -2 * numbersSeparation,
+                _G.getWidth() / 2 + numbers[n].getSpriteWidth() -2 * numbersSeparation,
+                numbersHeight + 200,numbersHeight + 300));
+
+        letter = _rM.getSprite("letrai");
+        letter.draw(_G, new Rect(_G.getWidth() / 2 -1 * numbersSeparation,
+                _G.getWidth() / 2 + numbers[n].getSpriteWidth() - 1* numbersSeparation,
+                numbersHeight + 200,numbersHeight + 300));
+
+        letter = _rM.getSprite("letran");
+        letter.draw(_G, new Rect(_G.getWidth() / 2 + 0 * numbersSeparation,
+                _G.getWidth() / 2 + numbers[n].getSpriteWidth() + 0 * numbersSeparation,
+                numbersHeight + 200,numbersHeight + 300));
+
+        letter = _rM.getSprite("letrat");
+        letter.draw(_G, new Rect(_G.getWidth() / 2 + 1 * numbersSeparation,
+                _G.getWidth() / 2 + numbers[n].getSpriteWidth() + 1 * numbersSeparation,
+                numbersHeight + 200,numbersHeight + 300));
+
+        letter = _rM.getSprite("letras");
+        letter.draw(_G, new Rect(_G.getWidth() / 2 + 2 * numbersSeparation,
+                _G.getWidth() / 2 + numbers[n].getSpriteWidth() + 2 * numbersSeparation,
+                numbersHeight + 200,numbersHeight + 300));
 
         return true;
     }
