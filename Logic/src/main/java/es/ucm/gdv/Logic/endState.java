@@ -20,7 +20,10 @@ public class endState extends State {
     Game _game;
     Graphics _G;
 
+    int numbersHeight = 800;
+    int numbersSeparation = 70;
     int _score;
+    Sprite numbers [] = new Sprite [10];
 
     public void setScore(int score){
         _score = score;
@@ -50,6 +53,10 @@ public class endState extends State {
                 (_G.getWidth()/2)+pAgain.getSpriteWidth()/2,
                 1396,
                 1396 + pAgain.getSpriteHeight()));
+
+        for( int i = 0; i < 10; i++){
+            numbers[i] =_rM.getSprite("number" + i);
+        }
     }
 
     @Override
@@ -81,6 +88,23 @@ public class endState extends State {
         Sprite pAgain = _rM.getSprite("playAgain");
         pAgain.draw(_G, pAgain.get_destRect());
 
+        int n =(int)(_score) / 100;
+        drawNumber(n, -2);
+
+        n = (_score) % 100 / 10;
+        drawNumber(n, -1);
+
+
+        n = (_score) % 100 % 10;
+        if(n == 10) n = 0;
+        drawNumber(n, 0);
+
         return true;
+    }
+
+    void drawNumber(int n, int separation){
+        numbers[n].draw(_G, new Rect(_G.getWidth() / 2 + separation * numbersSeparation,
+                _G.getWidth() / 2 + numbers[n].getSpriteWidth() + separation * numbersSeparation,
+                numbersHeight, numbersHeight + numbers[n].getSpriteHeight()));
     }
 }
