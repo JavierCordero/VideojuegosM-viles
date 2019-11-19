@@ -60,6 +60,10 @@ public class playState extends State {
 
     int numBalls = 5;
 
+
+    int numbersHeight = 400;
+    int numbersSeparation = 70;
+
     ball [] usedBalls = new ball[numBalls]; //= new LinkedList<>();
 
     ball lastBallCreated;
@@ -72,6 +76,8 @@ public class playState extends State {
     int _myColor;
 
     int numSprites = 0;
+
+    Sprite numbers [] = new Sprite [10];
 
     public playState(StatesManager statesManager, ResourceManager resourceManager,
                      Logic.BehindBars Bar, Logic.BehindColor bColor){
@@ -95,6 +101,10 @@ public class playState extends State {
             b = newRandomBall(b);
             b.active = false;
             usedBalls[i] = b;
+        }
+
+        for( int i = 0; i < 10; i++){
+            numbers[i] =_rM.getSprite("number" + i);
         }
 
         usedBalls[0].active = true;
@@ -140,7 +150,8 @@ public class playState extends State {
                     ballRect.get_top() + (int) (_ballsSpeed * deltaTime),
                         ballRect.get_bottom() + (int) (_ballsSpeed * deltaTime)));
 
-                if(ball.get_destRect().get_bottom() >= _G.getHeight())
+                if(ball.get_destRect().get_bottom() >= _rM.getSprite(actualPlayer).get_destRect().get_top() &&
+                        actualPlayer != usedBalls[i].get_myColor())
                 {
                     //el juego ha acabado has perdido
                     endState s = (endState)_statesManager.get_state_by_name("endState");
@@ -190,9 +201,42 @@ public class playState extends State {
         Sprite player = _rM.getSprite(actualPlayer);
 
         player.draw(_G,player.get_destRect());
-        // _resourceManager.getSprite("whitePlayer").draw(_game.getGraphics(),   new Rect(540-264,540+264,1200,1397));
+
+        if((_ballsTaken - 1) / 100 >= 1) {
+
+            int n =(int)(_ballsTaken - 1) / 100;
+            drawNumber(n, 0);
+
+            n = (_ballsTaken - 1) % 100 / 10;
+            drawNumber(n, 1);
+
+
+            n = (_ballsTaken - 1) % 100 % 10;
+            if(n == 10) n = 0;
+            drawNumber(n, 2);
+
+        }
+
+        else if ((_ballsTaken - 1) / 10 >= 1){
+            int n = (int)(_ballsTaken - 1) / 10;
+            drawNumber(n,0);
+
+            n = (_ballsTaken - 1) % 10;
+            drawNumber(n, 1);
+        }
+
+        else{
+            int n = _ballsTaken - 1;
+            drawNumber(n, 0);
+        }
 
         return true;
+    }
+
+    void drawNumber(int n, int separation){
+        numbers[n].draw(_G, new Rect(_rM.getSprite("BGArrow1").get_destRect().get_right() + separation * numbersSeparation,
+                _rM.getSprite("BGArrow1").get_destRect().get_right() + numbers[n].getSpriteWidth() + separation * numbersSeparation,
+                numbersHeight, numbersHeight + numbers[n].getSpriteHeight()));
     }
 
     void cambiaPlayer(){
@@ -243,7 +287,6 @@ public class playState extends State {
                 (_G.getWidth() / 2) + ballSize / 2,
                 -ballSize,
                 0 ));
-
         return b;
     }
 }

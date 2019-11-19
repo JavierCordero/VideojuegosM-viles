@@ -248,18 +248,19 @@ public class Logic implements LogicInterface {
 
         //NUMBERS
         int j = 3;
-        int index = 1;
+        int index = 0;
         for(int i = 1; i <= 10; i++){
 
-            _rM.createSpriteFromImage("font", new Rect((7 + index - 1) * 125,
-                    ((7 + index - 1) * 125) + 125,
+            _rM.createSpriteFromImage("font", new Rect((7 + index) * 125,
+                    ((7 + index) * 125) + 125,
                             j * 160 ,
                             (j * 160) + 160),
                         "number" + ( i - 1)  ,255);
 
+            index++;
             if(i == 8) {
                 j++;
-                index = 0;
+                index = -7;
             }
         }
 

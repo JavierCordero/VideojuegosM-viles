@@ -91,9 +91,6 @@ public class mainMenuState extends State {
                     ,tapToPlayY,
                 tapToPlayY + tapToPlay.getSpriteHeight()));
 
-        Sprite number = _rM.getSprite("number7");
-        number.draw(_G, new Rect(100,number.getSpriteWidth() + 100,0,number.getSpriteHeight() + 100));
-
         return true;
     }
 }
