@@ -2,6 +2,7 @@ package es.ucm.gdv.androidengine;
 
 import android.content.res.AssetManager;
 import android.graphics.Paint;
+import android.graphics.RectF;
 import android.view.SurfaceView;
 
 import es.ucm.gdv.engine.Graphics;
@@ -90,6 +91,16 @@ public class AndroidGraphics extends RescaleGraphics {
     @Override
     public void clear(int Color) {
         _canvas.drawColor(Color);
+    }
+
+    @Override
+    public void finalDrawColor(int Color, Rect dest) {
+        Paint p = new Paint();
+        RectF r = new RectF(dest.get_left(), dest.get_top(), dest.get_right(),dest.get_bottom());
+        p.setStyle(Paint.Style.FILL);
+
+        p.setColor(Color);
+        _canvas.drawRect(r, p);
     }
 
     /**

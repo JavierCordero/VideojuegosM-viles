@@ -68,9 +68,14 @@ public class mainMenuState extends State {
 
     @Override
     public Boolean render() {
-        _rM.getSprite(_bColor.getBGcolors()[_bColor.currentColor]).draw(_G, new Rect(0,1080,0,1920));
+         Sprite backArrow = _rM.getSprite("BGArrow1");
+         Rect bacArrowRect = backArrow.get_destRect();
+        _rM.getSprite(_bColor.getBGcolors()[_bColor.currentColor]).draw(_G, new Rect(bacArrowRect.get_left()+1,
+                bacArrowRect.get_right()-1,
+                0,
+                _G.getHeight()));
 
-        Sprite backArrow = _rM.getSprite("BGArrow1");
+
         backArrow.draw(_G, backArrow.get_destRect());
 
         Sprite backArrow2 = _rM.getSprite("BGArrow2");

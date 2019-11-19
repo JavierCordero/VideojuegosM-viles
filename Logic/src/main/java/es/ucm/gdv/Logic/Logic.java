@@ -184,10 +184,10 @@ public class Logic implements LogicInterface {
 
         _rM.createSpriteFromImage("arrowsBackground",
                 new Rect(0, flechas.getWidth(), 0, flechas.getHeight()),
-                "BGArrow1", 128);
+                "BGArrow1", 70);
         _rM.createSpriteFromImage("arrowsBackground",
                 new Rect(0, flechas.getWidth(), 0, flechas.getHeight()),
-                "BGArrow2", 128);
+                "BGArrow2", 70);
 
         Graphics G = _game.getGraphics();
 
@@ -294,7 +294,7 @@ public class Logic implements LogicInterface {
     public Boolean render() {
         _G.clear(0xFF000000); // Color negro para las bandas negras laterales.
 
-        Rect r = new Rect(0, _G.getWidth(), 0, _G.getHeight());
+        Rect r = new Rect(0, 1080, 0, 1920);
         _G.drawColor(colors[_behindColor.currentColor], r); //Va a fallar aqui, hay que implementarlo en android
 
         _statesManager.getActualState().render();

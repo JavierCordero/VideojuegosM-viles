@@ -92,7 +92,7 @@ public class playState extends State {
         _game = game;
         _G = _game.getGraphics();
 
-        _ballsTaken = 1;
+        _ballsTaken = 0;
         _ballsSpeed = _originalBallSpeed;
 
         for(int i = 0; i < numBalls; i++) {
@@ -146,16 +146,18 @@ public class playState extends State {
                 Sprite ball = usedBalls[i].getBallSprite();
                 Rect ballRect = ball.get_destRect();
 
+                int coso = (int) (_ballsSpeed * deltaTime);
+
                 ball.set_destRect(new Rect(ballRect.get_left(), ballRect.get_right(),
-                    ballRect.get_top() + (int) (_ballsSpeed * deltaTime),
-                        ballRect.get_bottom() + (int) (_ballsSpeed * deltaTime)));
+                    ballRect.get_top() + (_ballsSpeed * deltaTime),
+                        ballRect.get_bottom() + (_ballsSpeed * deltaTime)));
 
                 if(ball.get_destRect().get_bottom() >= _rM.getSprite(actualPlayer).get_destRect().get_top() &&
                         actualPlayer != usedBalls[i].get_myColor())
                 {
                     //el juego ha acabado has perdido
                     endState s = (endState)_statesManager.get_state_by_name("endState");
-                    s.setScore(_ballsTaken - 1);
+                    s.setScore(_ballsTaken);
                     _statesManager.chState("endState");
                 }
 
@@ -184,10 +186,12 @@ public class playState extends State {
     @Override
     public Boolean render() {
 
-        //_rM.getSprite(BGcolors[colorMatch]).draw(G, new Rect(0,1080,0,1920));
-        _rM.getSprite(_bColor.getBGcolors()[_bColor.currentColor]).draw(_G, new Rect(0,1080,0,1920));
-
         Sprite backArrow = _rM.getSprite("BGArrow1");
+        Rect bacArrowRect = backArrow.get_destRect();
+        _rM.getSprite(_bColor.getBGcolors()[_bColor.currentColor]).draw(_G, new Rect(bacArrowRect.get_left(),
+                bacArrowRect.get_right(),
+                0,
+                _G.getHeight()));
         backArrow.draw(_G, backArrow.get_destRect());
 
         Sprite backArrow2 = _rM.getSprite("BGArrow2");
@@ -202,41 +206,38 @@ public class playState extends State {
 
         player.draw(_G,player.get_destRect());
 
-        if((_ballsTaken - 1) / 100 >= 1) {
+        int residuo;
+        int centenas = (_ballsTaken/100);
+        residuo = _ballsTaken%100;
+        int decenas = (residuo/10);
+        residuo = residuo%10;
+        int unidades = (residuo/1);
 
-            int n =(int)(_ballsTaken - 1) / 100;
-            drawNumber(n, 0);
+        drawNumber(unidades, decenas, centenas);
 
-            n = (_ballsTaken - 1) % 100 / 10;
-            drawNumber(n, 1);
-
-
-            n = (_ballsTaken - 1) % 100 % 10;
-            if(n == 10) n = 0;
-            drawNumber(n, 2);
-
-        }
-
-        else if ((_ballsTaken - 1) / 10 >= 1){
-            int n = (int)(_ballsTaken - 1) / 10;
-            drawNumber(n,0);
-
-            n = (_ballsTaken - 1) % 10;
-            drawNumber(n, 1);
-        }
-
-        else{
-            int n = _ballsTaken - 1;
-            drawNumber(n, 0);
-        }
 
         return true;
     }
 
-    void drawNumber(int n, int separation){
-        numbers[n].draw(_G, new Rect(_rM.getSprite("BGArrow1").get_destRect().get_right() + separation * numbersSeparation,
-                _rM.getSprite("BGArrow1").get_destRect().get_right() + numbers[n].getSpriteWidth() + separation * numbersSeparation,
-                numbersHeight, numbersHeight + numbers[n].getSpriteHeight()));
+    void drawNumber(int unidades, int decenas, int centenas){
+        Rect unidadesRect = new Rect(_G.getWidth()-numbers[unidades].getSpriteWidth()-20,
+                                    _G.getWidth()-20,
+                                    numbersHeight,
+                                    numbersHeight+numbers[unidades].getSpriteHeight());
+
+        Rect decenasRect = new Rect(unidadesRect.get_left()-numbers[decenas].getSpriteWidth(),
+                                    unidadesRect.get_left()-1,
+                                    numbersHeight,
+                                    numbersHeight+numbers[decenas].getSpriteHeight());
+
+        Rect centenasRect = new Rect(decenasRect.get_left()-numbers[centenas].getSpriteWidth(),
+                                decenasRect.get_left()-1,
+                             numbersHeight,
+                            numbersHeight+numbers[centenas].getSpriteHeight());
+
+        numbers[unidades].draw(_G, unidadesRect);
+        if(_ballsTaken > 9)numbers[decenas].draw(_G, decenasRect);
+        if(_ballsTaken > 99)numbers[centenas].draw(_G, centenasRect);
     }
 
     void cambiaPlayer(){

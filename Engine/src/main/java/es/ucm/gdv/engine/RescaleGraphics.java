@@ -12,6 +12,7 @@ public abstract class RescaleGraphics implements Graphics {
     int diffX;
     int diffY;
 
+
     /**
      * Constructora de RescaleGraphics
      *
@@ -31,6 +32,20 @@ public abstract class RescaleGraphics implements Graphics {
         else ScaleFactor = scaleH;
 
     }
+
+    public void drawColor(int Color, Rect dest){
+        Rect newDest = new Rect(0,0,0,0);
+
+        int newStartLeft = (int)(_screenWidth - (LogicalWidth*ScaleFactor))/2;
+        int newStartTop = (int)(_screenHeight - (LogicalHeight*ScaleFactor))/2;
+
+        newDest.set_left(newStartLeft+(int)(dest.get_left()*ScaleFactor));
+        newDest.set_right((int)(dest.get_right()*ScaleFactor));
+        newDest.set_top(newStartTop+(int)(dest.get_top()*ScaleFactor));
+        newDest.set_bottom((int)(dest.get_bottom()*ScaleFactor));
+
+        finalDrawColor(Color, newDest);
+    };
 
     /**
      * Dibuja una imagen completa en pantalla en coordenadas x, y
@@ -149,6 +164,7 @@ public abstract class RescaleGraphics implements Graphics {
     public int getPhysicalHeight() { return _screenHeight; }
 
     abstract protected void finalDrawImage(Image img, Rect dest, Rect src, int alpha);
+    abstract protected void finalDrawColor(int color, Rect dest);
 
     /**
      * Establece los nuevos parametros de pantalla
