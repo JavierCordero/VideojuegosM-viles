@@ -8,6 +8,7 @@ import es.ucm.gdv.engine.Image;
 import es.ucm.gdv.engine.Rect;
 import es.ucm.gdv.engine.ResourceManager;
 import es.ucm.gdv.engine.Sprite;
+import es.ucm.gdv.Logic.ballManager;
 
 class particle{
     boolean active = false;
@@ -68,7 +69,7 @@ public class particleSystem {
     }
 
 
-    void ActivaParticulas(playState.ball destruida) {
+    void ActivaParticulas(ball destruida) {
         int activas = 0;
         int i = 0;
 
