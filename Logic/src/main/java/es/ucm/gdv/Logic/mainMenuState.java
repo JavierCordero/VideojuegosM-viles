@@ -4,14 +4,14 @@ import java.util.List;
 
 import es.ucm.gdv.engine.Game;
 import es.ucm.gdv.engine.Graphics;
-import es.ucm.gdv.engine.Image;
 import es.ucm.gdv.engine.Input;
 import es.ucm.gdv.engine.Rect;
 import es.ucm.gdv.engine.ResourceManager;
 import es.ucm.gdv.engine.Sprite;
 import es.ucm.gdv.engine.State;
 import es.ucm.gdv.engine.StatesManager;
-import sun.rmi.runtime.Log;
+import es.ucm.gdv.engine.Button;
+import sun.nio.cs.KOI8_R;
 
 /*task copyPNGs(type: Copy){
     description = "Copy image into assset folder..."
@@ -37,6 +37,9 @@ public class mainMenuState extends State {
     Logic.BehindBars _Bar;
     Logic.BehindColor _bColor;
 
+    Button _soundButton;
+    Button _instructionButton;
+
     public mainMenuState(StatesManager statesManager, ResourceManager resourceManager,
                          Logic.BehindBars Bar, Logic.BehindColor bColor){
         _statesManager = statesManager;
@@ -45,25 +48,39 @@ public class mainMenuState extends State {
         _bColor = bColor;
     }
 
+    @Override
+    public void handleEvent(List<Input.TouchEvent> l){
+        for(int i = 0; i < l.size(); i++){
+            Input.TouchEvent event = l.get(i);
+            if(event.getEvent() == Input.EventType.TOUCH)
+                if(_soundButton.buttonPressed(event.get_x(), event.get_y())) {
+                    if (!_soundButton.getPressed())
+                        _soundButton.changeButtonSprite(_rM.getSprite("mute"));
+                    else
+                        _soundButton.changeButtonSprite(_rM.getSprite("sound"));
+                }
+
+            else if(_instructionButton.buttonPressed(event.get_x(), event.get_y())) {
+                    _statesManager.enqueueState("instrState");
+                }
+            else
+                _statesManager.enqueueState("instrState");
+        }
+    }
 
     @Override
     public void init(Game game) {
         _game = game;
         _G = _game.getGraphics();
-        //colorMatch = (int) (Math.random() * BGcolors.length-1) + 1;
+
+        _soundButton = new Button(_rM.getSprite("sound"), new Rect(20,120,200,300), _G);
+        _instructionButton = new Button(_rM.getSprite("interrogation"), new Rect(970,1070,200,300), _G);
     }
 
     @Override
     public void update(float deltaTime) {
 
         _bColor.setCurrentColor(0); // color verde
-        List<Input.TouchEvent> l = _game.getInput().getTouchEvents();
-        for(int i = 0; i < l.size(); i++){
-            Input.TouchEvent event = l.get(i);
-            if(event.getEvent() == Input.EventType.TOUCH)
-                _statesManager.chState("instrState");
-        }
-
         _Bar.draw(deltaTime);
     }
 
@@ -96,6 +113,9 @@ public class mainMenuState extends State {
                 (_G.getWidth()/2)+tapToPlay.getSpriteWidth()/2
                     ,tapToPlayY,
                 tapToPlayY + tapToPlay.getSpriteHeight()));
+
+        _soundButton.drawButton();
+        _instructionButton.drawButton();
         return true;
     }
 }

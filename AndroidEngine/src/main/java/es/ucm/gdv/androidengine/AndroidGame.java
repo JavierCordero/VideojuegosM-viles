@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
+import java.util.List;
 import java.util.Vector;
 
 import es.ucm.gdv.engine.Game;
@@ -132,6 +133,11 @@ public class AndroidGame implements Game {
             _logic.update(deltaTime);
         }
 
+        private void handleEvent() {
+            List<Input.TouchEvent> l = getInput().getTouchEvents();
+            _logic.handleEvent(l);
+        }
+
         /**
          * realiza un "resent" por pantalla
          */
@@ -162,6 +168,7 @@ public class AndroidGame implements Game {
             while(_running){
 
                 deltaTime(); //Actualizamos el deltaTime
+                handleEvent();
                 update(deltaTime);
                 render();
             } // Bucle principal del juego

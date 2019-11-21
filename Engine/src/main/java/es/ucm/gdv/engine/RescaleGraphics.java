@@ -34,6 +34,15 @@ public abstract class RescaleGraphics implements Graphics {
     }
 
     public void drawColor(int Color, Rect dest){
+        Rect newDest = rescaleRect(dest);
+        finalDrawColor(Color, newDest);
+    };
+
+    public float getScaleFactor(){
+        return ScaleFactor;
+    }
+
+    public Rect rescaleRect(Rect dest){
         Rect newDest = new Rect(0,0,0,0);
 
         int newStartLeft = (int)(_screenWidth - (LogicalWidth*ScaleFactor))/2;
@@ -44,9 +53,8 @@ public abstract class RescaleGraphics implements Graphics {
         newDest.set_top(newStartTop+(int)(dest.get_top()*ScaleFactor));
         newDest.set_bottom((int)(dest.get_bottom()*ScaleFactor)+newStartTop);
 
-        finalDrawColor(Color, newDest);
-    };
-
+        return newDest;
+    }
 
     /**
      * Dibuja una imagen completa en pantalla en coordenadas x, y
@@ -61,15 +69,7 @@ public abstract class RescaleGraphics implements Graphics {
         Rect src = new Rect(0, image.getWidth(), 0, image.getHeight());
         Rect dest = new Rect(x,x+src.get_right(), y, y+src.get_bottom());
 
-        Rect newDest = new Rect(0,0,0,0);
-
-        int newStartLeft = (int)(_screenWidth - (LogicalWidth*ScaleFactor))/2;
-        int newStartTop = (int)(_screenHeight - (LogicalHeight*ScaleFactor))/2;
-
-        newDest.set_left(newStartLeft+(int)(dest.get_left()*ScaleFactor));
-        newDest.set_right((int)(dest.get_right()*ScaleFactor)+newStartLeft);
-        newDest.set_top(newStartTop+(int)(dest.get_top()*ScaleFactor));
-        newDest.set_bottom((int)(dest.get_bottom()*ScaleFactor)+newStartTop);
+        Rect newDest = rescaleRect(dest);
 
         finalDrawImage(image, src, newDest, alpha);
     }
@@ -87,15 +87,7 @@ public abstract class RescaleGraphics implements Graphics {
     public void drawImage(Image image, Rect src, int x, int y, int alpha) {
         Rect dest = new Rect(x,x+src.get_right(), y, y+src.get_bottom());
 
-        Rect newDest = new Rect(0,0,0,0);
-
-        int newStartLeft = (int)(_screenWidth - (LogicalWidth*ScaleFactor))/2;
-        int newStartTop = (int)(_screenHeight - (LogicalHeight*ScaleFactor))/2;
-
-        newDest.set_left(newStartLeft+(int)(dest.get_left()*ScaleFactor));
-        newDest.set_right((int)(dest.get_right()*ScaleFactor)+newStartLeft);
-        newDest.set_top(newStartTop+(int)(dest.get_top()*ScaleFactor));
-        newDest.set_bottom((int)(dest.get_bottom()*ScaleFactor)+newStartTop);
+        Rect newDest = rescaleRect(dest);
 
         finalDrawImage(image, src, newDest, alpha);
     }
@@ -112,15 +104,7 @@ public abstract class RescaleGraphics implements Graphics {
     public void drawImage(Image image, Rect src, Rect dest, int alpha) {
         //if(_screenWidth > LogicalWidth){ dest.set_left((_screenWidth/2 - LogicalWidth/2)); dest.set_right((_screenWidth/2 + LogicalWidth/2)); }
         //if(_screenHeight > LogicalHeight){ dest.set_top(dest.get_top()-diffY); }
-        Rect newDest = new Rect(0,0,0,0);
-
-        int newStartLeft = (int)(_screenWidth - (LogicalWidth*ScaleFactor))/2;
-        int newStartTop = (int)(_screenHeight - (LogicalHeight*ScaleFactor))/2;
-
-        newDest.set_left(newStartLeft+(int)(dest.get_left()*ScaleFactor));
-        newDest.set_right((int)(dest.get_right()*ScaleFactor)+newStartLeft);
-        newDest.set_top(newStartTop+(int)(dest.get_top()*ScaleFactor));
-        newDest.set_bottom((int)(dest.get_bottom()*ScaleFactor)+newStartTop);
+        Rect newDest = rescaleRect(dest);
 
         finalDrawImage(image, src, newDest, alpha);
     }

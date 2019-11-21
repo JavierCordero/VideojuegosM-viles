@@ -6,6 +6,7 @@ import java.util.Map;
 public class StatesManager {
     Map<String, State> states = new HashMap<String, State>();
     State _actualState;
+    State _quedState;
     Game _game;
 
     public StatesManager(Game game){
@@ -16,9 +17,10 @@ public class StatesManager {
         states.put(name, s);
     }
 
-    public void chState(String stateID){
+    public void changeState(String stateID){
         if(states.containsKey(stateID)){
             _actualState = states.get(stateID);
+            _quedState = null;
             _actualState.init(_game);
         }
     }
@@ -35,4 +37,13 @@ public class StatesManager {
         return _actualState;
     }
 
+    public State getQuedState(){
+        return _quedState;
+    }
+
+    public void enqueueState(String name) {
+        if (states.containsKey(name)) {
+            _quedState = states.get(name);
+        }
+    }
 }

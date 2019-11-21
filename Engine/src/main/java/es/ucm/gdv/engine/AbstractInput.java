@@ -14,8 +14,6 @@ public abstract class AbstractInput implements Input {
         return  aux;
     }
 
-    synchronized protected void addEvent(TouchEvent e){
-        _touchEvents.add(e);
-    }
+    synchronized protected void addEvent(TouchEvent e){_touchEvents.add(e);}
 
 }

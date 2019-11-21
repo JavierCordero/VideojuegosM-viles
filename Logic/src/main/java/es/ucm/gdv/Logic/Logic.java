@@ -3,6 +3,7 @@ package es.ucm.gdv.Logic;
 import es.ucm.gdv.engine.Game;
 import es.ucm.gdv.engine.Graphics;
 import es.ucm.gdv.engine.Image;
+import es.ucm.gdv.engine.Input;
 import es.ucm.gdv.engine.LogicInterface;
 import es.ucm.gdv.engine.Rect;
 import es.ucm.gdv.engine.ResourceManager;
@@ -11,6 +12,7 @@ import es.ucm.gdv.engine.State;
 import es.ucm.gdv.engine.StatesManager;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class Logic implements LogicInterface {
@@ -129,18 +131,22 @@ public class Logic implements LogicInterface {
        _statesManager = new StatesManager(_game);
 
        State playState = new playState(_statesManager, _rM, bars, _behindColor);
-       _statesManager.addState(playState, "playState");
+       playState.stateName = "playState";
+       _statesManager.addState(playState, playState.stateName);
 
         State instrState = new instructionsState(_statesManager, _rM, bars, _behindColor);
-        _statesManager.addState(instrState, "instrState");
+        instrState.stateName = "instrState";
+        _statesManager.addState(instrState, instrState.stateName);
 
        State mainMenuState = new mainMenuState(_statesManager, _rM, bars, _behindColor);
-       _statesManager.addState(mainMenuState, "mainMenuState");
+       mainMenuState.stateName = "mainMenuState";
+       _statesManager.addState(mainMenuState,  mainMenuState.stateName);
 
        State endState = new endState(_statesManager, _rM, bars, _behindColor);
-        _statesManager.addState(endState, "endState");
+       endState.stateName = "endState";
+        _statesManager.addState(endState, endState.stateName);
 
-       _statesManager.chState("mainMenuState");
+       _statesManager.changeState("mainMenuState");
 
     }
 
@@ -294,8 +300,16 @@ public class Logic implements LogicInterface {
     }
 
     @Override
+    public void handleEvent(List<Input.TouchEvent> l){
+        _statesManager.getActualState().handleEvent(l);
+    }
+
+    @Override
     public void update(float deltaTime) {
+
         _statesManager.getActualState().update(deltaTime);
+        //Comprobamos si hay algún estado al que tengamos que cambiar.
+
     }
 
     @Override
@@ -306,6 +320,9 @@ public class Logic implements LogicInterface {
         _G.drawColor(colors[_behindColor.currentColor], r);
 
         _statesManager.getActualState().render();
+
+        if(_statesManager.getQuedState() != null)
+            _statesManager.changeState(_statesManager.getQuedState().stateName);
         return true;
     }
 }

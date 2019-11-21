@@ -2,6 +2,7 @@ package es.ucm.gdv.Logic;
 
 import java.util.List;
 
+import es.ucm.gdv.engine.Button;
 import es.ucm.gdv.engine.Game;
 import es.ucm.gdv.engine.Graphics;
 import es.ucm.gdv.engine.Image;
@@ -33,6 +34,8 @@ public class instructionsState extends State {
     Logic.BehindBars _Bar;
     Logic.BehindColor _bColor;
 
+    Button _quitButton;
+
     public instructionsState(StatesManager statesManager, ResourceManager resourceManager,
                              Logic.BehindBars Bar, Logic.BehindColor bColor){
         _statesManager = statesManager;
@@ -42,23 +45,28 @@ public class instructionsState extends State {
     }
 
     @Override
+    public void handleEvent(List<Input.TouchEvent> l){
+        for(int i = 0; i < l.size(); i++){
+            Input.TouchEvent event = l.get(i);
+            if(event.getEvent() == Input.EventType.TOUCH)
+                if(_quitButton.buttonPressed(event.get_x(), event.get_y())) {
+                    _statesManager.enqueueState("playState");
+                }
+                else
+                    _statesManager.enqueueState("playState");
+        }
+    }
+
+    @Override
     public void init(Game game) {
         _game = game;
         _G = _game.getGraphics();
-        //colorMatch = (int) (Math.random() * BGcolors.length-1) + 1;
-        //colorMatch = 0; //Color verde del array de colores
+        _quitButton = new Button(_rM.getSprite("exit"), new Rect(970,1070,200,300), _G);
     }
 
     @Override
     public void update(float deltaTime) {
         _bColor.setCurrentColor(0);
-
-        List<Input.TouchEvent> l = _game.getInput().getTouchEvents();
-        for(int i = 0; i < l.size(); i++){
-            Input.TouchEvent event = l.get(i);
-            if(event.getEvent() == Input.EventType.TOUCH)
-                _statesManager.chState("playState");
-        }
 
         Graphics G = _game.getGraphics();
 
@@ -98,6 +106,8 @@ public class instructionsState extends State {
                 (_G.getWidth()/2)+tapToPlay.getSpriteWidth()/2
                 ,tapToPlayY,
                 tapToPlayY + tapToPlay.getSpriteHeight()));
+
+        _quitButton.drawButton();
 
         return true;
     }

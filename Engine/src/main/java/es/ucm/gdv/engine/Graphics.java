@@ -11,4 +11,6 @@ public interface Graphics {
     public int getHeight();
     public int getPhysicalWidth();
     public int getPhysicalHeight();
+    public float getScaleFactor();
+    public Rect rescaleRect(Rect dest);
 }

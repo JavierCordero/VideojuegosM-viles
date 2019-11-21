@@ -45,6 +45,7 @@ public class PCGraphics extends RescaleGraphics {
 
             setSize(_width, _height);
             setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+            //setUndecorated(true);
             //_graphics = new PCGraphics(ventana);
 
             addComponentListener(new ComponentAdapter()

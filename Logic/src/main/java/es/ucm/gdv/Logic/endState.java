@@ -2,6 +2,7 @@ package es.ucm.gdv.Logic;
 
 import java.util.List;
 
+import es.ucm.gdv.engine.Button;
 import es.ucm.gdv.engine.Game;
 import es.ucm.gdv.engine.Graphics;
 import es.ucm.gdv.engine.Input;
@@ -24,6 +25,9 @@ public class endState extends State {
     int numbersSeparation = 70;
     int _score;
     Sprite numbers [] = new Sprite [10];
+
+    Button _soundButton;
+    Button _instructionButton;
 
     public void setScore(int score){
         _score = score;
@@ -57,18 +61,35 @@ public class endState extends State {
         for( int i = 0; i < 10; i++){
             numbers[i] =_rM.getSprite("number" + i);
         }
+
+        _soundButton = new Button(_rM.getSprite("sound"), new Rect(20,120,200,300), _G);
+        _instructionButton = new Button(_rM.getSprite("interrogation"), new Rect(970,1070,200,300), _G);
+    }
+
+    @Override
+    public void handleEvent(List<Input.TouchEvent> l){
+        for(int i = 0; i < l.size(); i++){
+            Input.TouchEvent event = l.get(i);
+            if(event.getEvent() == Input.EventType.TOUCH)
+                if(_soundButton.buttonPressed(event.get_x(), event.get_y())) {
+                    if (!_soundButton.getPressed())
+                        _soundButton.changeButtonSprite(_rM.getSprite("mute"));
+                    else
+                        _soundButton.changeButtonSprite(_rM.getSprite("sound"));
+                }
+
+                else if(_instructionButton.buttonPressed(event.get_x(), event.get_y())) {
+                    _statesManager.enqueueState("instrState");
+                }
+                else
+                    _statesManager.enqueueState("playState");
+
+        }
     }
 
     @Override
     public void update(float deltaTime) {
         _bColor.setCurrentColor(2); // color verde
-        List<Input.TouchEvent> l = _game.getInput().getTouchEvents();
-        for(int i = 0; i < l.size(); i++){
-            Input.TouchEvent event = l.get(i);
-            if(event.getEvent() == Input.EventType.TOUCH)
-                _statesManager.chState("playState");
-        }
-
         _Bar.draw(deltaTime);
     }
 
@@ -133,6 +154,9 @@ public class endState extends State {
         letter.draw(_G, new Rect(_G.getWidth() / 2 + 2 * numbersSeparation,
                 _G.getWidth() / 2 + numbers[n].getSpriteWidth() + 2 * numbersSeparation,
                 numbersHeight + 200,numbersHeight + 300));
+
+        _soundButton.drawButton();
+        _instructionButton.drawButton();
 
         return true;
     }

@@ -3,6 +3,7 @@ package es.ucm.gdv.PCEngine;
 import org.omg.PortableInterceptor.SYSTEM_EXCEPTION;
 
 import java.awt.image.BufferStrategy;
+import java.util.List;
 
 import es.ucm.gdv.engine.Game;
 import es.ucm.gdv.engine.Graphics;
@@ -33,9 +34,15 @@ public class PCGame implements Game {
 
         while(true){
             deltaTime(); //Actualizamos el deltaTime
+            handleEvent();
             update(deltaTime);
             render();
         }
+    }
+
+    private void handleEvent() {
+        List<Input.TouchEvent> l = getInput().getTouchEvents();
+        _logic.handleEvent(l);
     }
 
     public void update(float deltaTime){

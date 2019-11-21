@@ -8,4 +8,6 @@ public abstract class State implements LogicInterface {
     public abstract void update(float deltaTime);
     @Override
     public abstract Boolean render();
+
+    public String stateName;
 }

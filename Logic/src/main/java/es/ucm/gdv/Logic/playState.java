@@ -69,7 +69,8 @@ public class playState extends State {
 
     //parametros de los numeros
     int numbersHeight = 400;
-    int numbersSeparation = 70;
+    int numbersSeparation = 50;
+    int rigthBorderNumberSeparation = 20;
 
     particleSystem pSystem;
 
@@ -137,16 +138,19 @@ public class playState extends State {
     }
 
     @Override
-    public void update(float deltaTime) {
-
-        _bColor.setCurrentColor(_myColor);
-
-        List<Input.TouchEvent> l = _game.getInput().getTouchEvents();
+    public void handleEvent(List<Input.TouchEvent> l){
         for(int i = 0; i < l.size(); i++){
             Input.TouchEvent event = l.get(i);
             if(event.getEvent() == Input.EventType.TOUCH)
                 cambiaPlayer();
         }
+    }
+
+    @Override
+    public void update(float deltaTime) {
+
+        _bColor.setCurrentColor(_myColor);
+
         _Bar.draw(deltaTime);
 
         for(int i = 0; i < usedBalls.length; i++) {
@@ -165,7 +169,7 @@ public class playState extends State {
                     //el juego ha acabado has perdido
                     endState s = (endState)_statesManager.get_state_by_name("endState");
                     s.setScore(_ballsTaken);
-                    _statesManager.chState("endState");
+                    _statesManager.enqueueState("endState");
                 }
 
                 else if(ball.get_destRect().get_bottom() >= _rM.getSprite(actualPlayer).get_destRect().get_top()
@@ -232,18 +236,18 @@ public class playState extends State {
         residuo = residuo%10;
         int unidades = (residuo/1);
 
-        Rect unidadesRect = new Rect(_G.getWidth()-numbers[unidades].getSpriteWidth()-20,
-                                    _G.getWidth()-20,
+        Rect unidadesRect = new Rect(_G.getWidth()-numbers[unidades].getSpriteWidth()-rigthBorderNumberSeparation,
+                                    _G.getWidth()-rigthBorderNumberSeparation,
                                     numbersHeight,
                                     numbersHeight+numbers[unidades].getSpriteHeight());
 
-        Rect decenasRect = new Rect(unidadesRect.get_left()-numbers[decenas].getSpriteWidth(),
-                                    unidadesRect.get_left()-1,
+        Rect decenasRect = new Rect(unidadesRect.get_left()-numbers[decenas].getSpriteWidth() + numbersSeparation,
+                                    unidadesRect.get_left()-1 + numbersSeparation,
                                     numbersHeight,
                                     numbersHeight+numbers[decenas].getSpriteHeight());
 
-        Rect centenasRect = new Rect(decenasRect.get_left()-numbers[centenas].getSpriteWidth(),
-                                decenasRect.get_left()-1,
+        Rect centenasRect = new Rect(decenasRect.get_left()-numbers[centenas].getSpriteWidth() + numbersSeparation,
+                                decenasRect.get_left()-1 + numbersSeparation,
                              numbersHeight,
                             numbersHeight+numbers[centenas].getSpriteHeight());
 
