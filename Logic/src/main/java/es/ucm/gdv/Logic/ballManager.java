@@ -1,30 +1,24 @@
 package es.ucm.gdv.Logic;
 
+import java.util.Random;
+
 import es.ucm.gdv.engine.Graphics;
 import es.ucm.gdv.engine.Image;
 import es.ucm.gdv.engine.Rect;
 import es.ucm.gdv.engine.ResourceManager;
 import es.ucm.gdv.engine.Sprite;
 
-public class ball {
-    boolean active;
+class ball{
+    boolean active = false;
     Sprite _mySprite;
     String _myColor;
-    String actualBall = "whiteBall";
-    int numBalls = 5;
-    ResourceManager _rM;
-    int numSprites = 0;
-    Graphics _G;
-    int ballSize = 128;
 
-    playState.ball[] usedBalls = new playState.ball[numBalls];
+    public void setColor (String c){_myColor = c;}
 
     public ball(Sprite sprite){
         _mySprite = sprite;
     }
 
-    public void setColor (String c){_myColor = c;}
-     
     public void changeBallSprite(Sprite newSprite){
         _mySprite = newSprite;
     }
@@ -36,14 +30,54 @@ public class ball {
     public String get_myColor(){
         return _myColor;
     }
+}
+
+public class ballManager {
+    ResourceManager _rM;
+    Graphics _G;
 
 
-    public void cambiaBall(){
+    int _originalBallSpeed = 430;
+    int _ballsSpeed;
+    int ballSeparation = 395;
+    int incrBallSpeed = 90;
+    int ballSize = 128;
+
+    int _ballsTaken;
+    int numBalls = 5;
+    ball[] WhiteBalls = new ball[numBalls];
+    ball[] BlackBalls = new ball[numBalls];
+    ball lastBallCreated;
+
+    public ballManager(ResourceManager resourceManager, Graphics graphics){
+        _rM = resourceManager;
+        _G = graphics;
+        _ballsTaken = 0;
+        _ballsSpeed = _originalBallSpeed;
+
+
+        Image balls = _rM.getImage("balls");
+        for(int i = 0; i < numBalls; i++) {
+            _rM.createSpriteFromImage("balls",
+                    new Rect(0, 1280 / 10, 0, balls.getHeight() / 2),
+                    "whiteBall" + i, new Random().nextInt(70 + 120));
+
+            _rM.createSpriteFromImage("balls",
+                    new Rect(0, 1280 / 10, 0, balls.getHeight() / 2),
+                    "blackBall" + i, new Random().nextInt(70 + 120));
+
+
+            WhiteBalls[i] = new ball(_rM.getSprite("whiteBall"+i));
+            BlackBalls[i] = new ball(_rM.getSprite("blackBall"+i));
+        }
+    }
+
+ /*   void cambiaBall(){
         if(actualBall == "whiteBall") actualBall = "blackBall";
         else actualBall = "whiteBall";
     }
 
-    public playState.ball firstUnusedBall(){
+    playState.ball firstUnusedBall(){
         int i;
         for(i = 0; i < usedBalls.length - 1; i++){
             if(!usedBalls[i].active)
@@ -52,7 +86,7 @@ public class ball {
         return usedBalls[i];
     }
 
-    public playState.ball newRandomBall(playState.ball b){
+    playState.ball newRandomBall(playState.ball b){
         int rnd = (int) (Math.random() * 100) + 1; // end entre 0 y 100
 
         if(rnd  > 70)
@@ -83,5 +117,6 @@ public class ball {
                 0 ));
         numSprites++;
         return b;
-    }
+    }*/
+
 }
