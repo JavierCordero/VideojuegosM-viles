@@ -237,6 +237,14 @@ public class Logic implements LogicInterface {
                 new Rect(0, 1280 / 10, balls.getHeight() / 2, balls.getHeight()),
                 "blackBall", 255);
 
+        _rM.createSpriteFromImage("balls",
+                new Rect(0, 1280 / 10, 0, balls.getHeight() / 2),
+                "whiteParticle", 20);
+
+        _rM.createSpriteFromImage("balls",
+                new Rect(0, 1280 / 10, balls.getHeight() / 2, balls.getHeight()),
+                "blackParticle", 20);
+
         Image gOver = _rM.getImage("gameOver");
         _rM.createSpriteFromImage("gameOver", new Rect(0, gOver.getWidth(), 0 , gOver.getHeight()),
                 "gameOver",255);
@@ -295,7 +303,7 @@ public class Logic implements LogicInterface {
         _G.clear(0xFF000000); // Color negro para las bandas negras laterales.
 
         Rect r = new Rect(0, 1080, 0, 1920);
-        _G.drawColor(colors[_behindColor.currentColor], r); //Va a fallar aqui, hay que implementarlo en android
+        _G.drawColor(colors[_behindColor.currentColor], r);
 
         _statesManager.getActualState().render();
         return true;

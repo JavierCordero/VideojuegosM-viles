@@ -3,6 +3,7 @@ package es.ucm.gdv.Logic;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
+import java.util.Random;
 
 import es.ucm.gdv.engine.Game;
 import es.ucm.gdv.engine.Graphics;
@@ -40,6 +41,38 @@ public class playState extends State {
         }
     }
 
+    class particle{
+        boolean active;
+        Sprite _mySprite;
+        String _myColor;
+        float velX, velY;
+        float timeAlive = 0;
+
+        public void setColor (String c){_myColor = c;}
+
+        public particle(Sprite sprite){
+            _mySprite = sprite;
+        }
+
+        public void changeBallSprite(Sprite newSprite){
+            _mySprite = newSprite;
+        }
+
+        public Sprite getSprite(){
+            return _mySprite;
+        }
+
+        public String get_myColor(){
+            return _myColor;
+        }
+
+        public void setVelocity(float X, float Y) {velX = X; velY = Y;}
+
+        public void setTimeAlive(float delta) { timeAlive += delta; }
+
+        public void restartTime() { timeAlive = 0; }
+    }
+
     Game _game;
     ResourceManager _rM;
 
@@ -59,12 +92,14 @@ public class playState extends State {
     int _ballsTaken;
 
     int numBalls = 5;
+    int numParticles = 15;
 
 
     int numbersHeight = 400;
     int numbersSeparation = 70;
 
-    ball [] usedBalls = new ball[numBalls]; //= new LinkedList<>();
+    ball [] usedBalls = new ball[numBalls];
+    particle [] particles = new particle[numParticles];
 
     ball lastBallCreated;
 
@@ -89,18 +124,26 @@ public class playState extends State {
 
     @Override
     public void init(Game game) {
+        //PARAMETROS INICIALES
         _game = game;
         _G = _game.getGraphics();
-
         _ballsTaken = 0;
         _ballsSpeed = _originalBallSpeed;
 
+        //INICIALIZAMOS LAS BOLAS
         for(int i = 0; i < numBalls; i++) {
-
             ball b = new ball(_rM.getSprite("whiteBall"));
             b = newRandomBall(b);
             b.active = false;
             usedBalls[i] = b;
+        }
+
+
+        //INICIALIZAMOS LAS PARTICULAS
+        for(int i = 0; i < numParticles; i++){
+            particle b = new particle(_rM.getSprite("whiteParticle"));
+            b.active = false;
+            particles[i] = b;
         }
 
         for( int i = 0; i < 10; i++){
@@ -146,8 +189,6 @@ public class playState extends State {
                 Sprite ball = usedBalls[i].getBallSprite();
                 Rect ballRect = ball.get_destRect();
 
-                int coso = (int) (_ballsSpeed * deltaTime);
-
                 ball.set_destRect(new Rect(ballRect.get_left(), ballRect.get_right(),
                     ballRect.get_top() + (_ballsSpeed * deltaTime),
                         ballRect.get_bottom() + (_ballsSpeed * deltaTime)));
@@ -165,6 +206,7 @@ public class playState extends State {
                 && ball.get_destRect().get_bottom() < _rM.getSprite(actualPlayer).get_destRect().get_bottom()
                 && actualPlayer == usedBalls[i].get_myColor()){
                     usedBalls[i].active = false;
+                    ActivaParticulas(usedBalls[i]);
                     _ballsTaken++;
 
                     if(_ballsTaken % 11 == 0)
@@ -182,6 +224,8 @@ public class playState extends State {
                 }
             }
         }
+
+        ActualizaPartuculas(deltaTime);
     }
     @Override
     public Boolean render() {
@@ -202,9 +246,22 @@ public class playState extends State {
                 usedBalls[i].getBallSprite().draw(_G, usedBalls[i].getBallSprite().get_destRect());
         }
 
+        for(int i = 0; i < numParticles; i++) {
+            if(particles[i].active)
+                particles[i].getSprite().draw(_G, particles[i].getSprite().get_destRect());
+        }
+
         Sprite player = _rM.getSprite(actualPlayer);
 
         player.draw(_G,player.get_destRect());
+
+
+        drawNumber();
+
+        return true;
+    }
+
+    void drawNumber(){
 
         int residuo;
         int centenas = (_ballsTaken/100);
@@ -213,13 +270,6 @@ public class playState extends State {
         residuo = residuo%10;
         int unidades = (residuo/1);
 
-        drawNumber(unidades, decenas, centenas);
-
-
-        return true;
-    }
-
-    void drawNumber(int unidades, int decenas, int centenas){
         Rect unidadesRect = new Rect(_G.getWidth()-numbers[unidades].getSpriteWidth()-20,
                                     _G.getWidth()-20,
                                     numbersHeight,
@@ -288,6 +338,72 @@ public class playState extends State {
                 (_G.getWidth() / 2) + ballSize / 2,
                 -ballSize,
                 0 ));
+        numSprites++;
         return b;
+    }
+
+    particle eligeColorParticula(ball b, particle p){
+
+        Image balls = _rM.getImage("balls");
+
+        if(b._myColor == "blackPlayer"){
+            _rM.createSpriteFromImage("particles",
+                    new Rect(0, 1280 / 10, balls.getHeight() / 2, balls.getHeight()),
+                    "blackParticle", 20);
+            Sprite s = _rM.getSprite("blackParticle");
+            p.changeBallSprite(s);
+            p.setColor("blackPlayer");
+        }
+        if(b._myColor == "whitePlayer"){
+            _rM.createSpriteFromImage("particles",
+                    new Rect(0, 1280 / 10, balls.getHeight() / 2, balls.getHeight()),
+                    "blackParticle", 20);
+            Sprite s = _rM.getSprite("whiteParticle");
+            p.changeBallSprite(s);
+            p.setColor("whitePlayer");
+        }
+        return p;
+    }
+
+    void ActivaParticulas(ball destruida) {
+        int activas = 0;
+        int i = 0;
+        while(i < particles.length && activas < 5){
+            if(!particles[i].active){
+                //particles[i] = eligeColorParticula(destruida, particles[i]);
+                particles[i].active = true;
+                particles[i].restartTime();
+                particles[i].setVelocity(new Random().nextInt(100+100)-100, -100);
+
+                Sprite p =  particles[i].getSprite();
+                particles[i].getSprite().set_destRect(new Rect((_G.getWidth()/2)-p.getSpriteWidth()/2,
+                        (_G.getWidth()/2)+p.getSpriteWidth()/2,
+                        playerDistanceToTop-p.getSpriteHeight()/2,
+                        playerDistanceToTop+p.getSpriteHeight()/2));
+
+                activas++;
+            }
+            i++;
+        }
+    }
+
+    void ActualizaPartuculas(float deltaTime){
+        for(int i = 0; i < particles.length; i++) {
+            if (particles[i].active) {
+                Sprite particle = particles[i].getSprite();
+                Rect pRect = particle.get_destRect();
+
+                particle.set_destRect(new Rect(pRect.get_left() + (particles[i].velX * deltaTime),
+                        pRect.get_right() + (particles[i].velX * deltaTime),
+                        pRect.get_top() + (particles[i].velY * deltaTime),
+                        pRect.get_bottom() + (particles[i].velY * deltaTime)));
+
+                particles[i].setVelocity((particles[i].velX), (particles[i].velY)+(100*deltaTime));
+
+                particles[i].setTimeAlive(deltaTime);
+
+                if(particles[i].timeAlive > 1) particles[i].active = false;
+            }
+        }
     }
 }

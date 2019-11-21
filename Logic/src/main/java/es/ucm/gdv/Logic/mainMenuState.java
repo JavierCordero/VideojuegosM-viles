@@ -45,6 +45,7 @@ public class mainMenuState extends State {
         _bColor = bColor;
     }
 
+
     @Override
     public void init(Game game) {
         _game = game;

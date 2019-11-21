@@ -18,7 +18,7 @@ public class AndroidInput extends AbstractInput {
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
 
-                int action = motionEvent.getAction() & MotionEvent.ACTION_MASK;
+                int action = motionEvent.getActionMasked() & MotionEvent.ACTION_MASK;
                 TouchEvent tE = new TouchEvent();
                 tE.set_fingerID(motionEvent.getActionIndex());
                 tE.set_x((int)motionEvent.getX(motionEvent.getActionIndex()));

@@ -47,6 +47,7 @@ public abstract class RescaleGraphics implements Graphics {
         finalDrawColor(Color, newDest);
     };
 
+
     /**
      * Dibuja una imagen completa en pantalla en coordenadas x, y
      *
