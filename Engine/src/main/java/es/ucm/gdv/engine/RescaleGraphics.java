@@ -40,9 +40,9 @@ public abstract class RescaleGraphics implements Graphics {
         int newStartTop = (int)(_screenHeight - (LogicalHeight*ScaleFactor))/2;
 
         newDest.set_left(newStartLeft+(int)(dest.get_left()*ScaleFactor));
-        newDest.set_right((int)(dest.get_right()*ScaleFactor));
+        newDest.set_right((int)(dest.get_right()*ScaleFactor)+newStartLeft);
         newDest.set_top(newStartTop+(int)(dest.get_top()*ScaleFactor));
-        newDest.set_bottom((int)(dest.get_bottom()*ScaleFactor));
+        newDest.set_bottom((int)(dest.get_bottom()*ScaleFactor)+newStartTop);
 
         finalDrawColor(Color, newDest);
     };

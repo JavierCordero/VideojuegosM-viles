@@ -48,7 +48,7 @@ public class AndroidGame implements Game {
      * @param screenH Nuevo alto fisico
      */
     public void ScreenOrientation(int LogicalW, int LogicalH, int screenW, int screenH){
-        ((RescaleGraphics)_graphics).setLogicalScale(LogicalW, LogicalH, screenW, screenH);
+        (_graphics).setLogicalScale(LogicalW, LogicalH, screenW, screenH);
     }
 
     /**

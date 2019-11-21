@@ -302,7 +302,7 @@ public class Logic implements LogicInterface {
     public Boolean render() {
         _G.clear(0xFF000000); // Color negro para las bandas negras laterales.
 
-        Rect r = new Rect(0, 1080, 0, 1920);
+        Rect r = new Rect(0, _G.getWidth(), 0, _G.getHeight());
         _G.drawColor(colors[_behindColor.currentColor], r);
 
         _statesManager.getActualState().render();
