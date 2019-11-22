@@ -9,10 +9,11 @@ import es.ucm.gdv.engine.Game;
 import es.ucm.gdv.engine.Graphics;
 import es.ucm.gdv.engine.Input;
 import es.ucm.gdv.engine.LogicInterface;
+import es.ucm.gdv.engine.Rect;
 
 public class PCGame implements Game {
 
-    PCGraphics _graphics;
+    PCGraphics _G;
     PCInput _input;
     LogicInterface _logic;
 
@@ -24,8 +25,8 @@ public class PCGame implements Game {
 
     public PCGame(LogicInterface logic, int width, int height){
 
-        _graphics = new PCGraphics(width, height);
-        _input = new PCInput(_graphics.get_ventana());
+        _G = new PCGraphics(width, height);
+        _input = new PCInput(_G.get_ventana());
         _logic = logic;
         _logic.init(this);
 
@@ -42,7 +43,14 @@ public class PCGame implements Game {
 
     private void handleEvent() {
         List<Input.TouchEvent> l = getInput().getTouchEvents();
-        _logic.handleEvent(l);
+        for(int i = 0; i < l.size(); i++) {
+            Input.TouchEvent event = l.get(i);
+            if( _G.mouseInsideScreen(event.get_x(), event.get_y()))
+            {
+                _logic.handleEvent(event);
+            }
+
+        }
     }
 
     public void update(float deltaTime){
@@ -51,12 +59,12 @@ public class PCGame implements Game {
 
     public void render(){
 
-        _strategy = _graphics.getBufferStrategy();
+        _strategy = _G.getBufferStrategy();
 
         do {
             do {
                 _awtGraphics = _strategy.getDrawGraphics();
-                _graphics.setGraphics(_awtGraphics);
+                _G.setGraphics(_awtGraphics);
                 try {
                     _logic.render();
                 }
@@ -70,7 +78,7 @@ public class PCGame implements Game {
 
     @Override
     public Graphics getGraphics() {
-        return _graphics;
+        return _G;
     }
 
     @Override
@@ -79,11 +87,11 @@ public class PCGame implements Game {
     }
 
     public int getScreenWidth() {
-        return _graphics.getWidth();
+        return _G.getWidth();
     }
 
     public int getScreenHeight() {
-        return _graphics.getHeight();
+        return _G.getHeight();
     }
 
     /**

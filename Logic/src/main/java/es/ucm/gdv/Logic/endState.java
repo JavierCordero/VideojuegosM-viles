@@ -16,7 +16,7 @@ public class endState extends State {
 
     ResourceManager _rM;
     StatesManager _statesManager;
-    Logic.BehindBars _Bar;
+   Arrows _arrows;
     Logic.BehindColor _bColor;
     Game _game;
     Graphics _G;
@@ -29,15 +29,19 @@ public class endState extends State {
     Button _soundButton;
     Button _instructionButton;
 
+    flashEffect _flashEffect;
+
+    Sin _sin;
+
     public void setScore(int score){
         _score = score;
     }
 
     public endState(StatesManager statesManager, ResourceManager resourceManager,
-                    Logic.BehindBars Bar, Logic.BehindColor bColor){
+                    Arrows arrow, Logic.BehindColor bColor){
         _statesManager = statesManager;
         _rM = resourceManager;
-        _Bar = Bar;
+        _arrows = arrow;
         _bColor = bColor;
     }
 
@@ -64,12 +68,15 @@ public class endState extends State {
 
         _soundButton = new Button(_rM.getSprite("sound"), new Rect(20,120,200,300), _G);
         _instructionButton = new Button(_rM.getSprite("interrogation"), new Rect(970,1070,200,300), _G);
+
+        _flashEffect = new flashEffect();
+        _flashEffect.init(_rM, _G);
+
+        _sin = new Sin();
     }
 
     @Override
-    public void handleEvent(List<Input.TouchEvent> l){
-        for(int i = 0; i < l.size(); i++){
-            Input.TouchEvent event = l.get(i);
+    public void handleEvent(Input.TouchEvent event){
             if(event.getEvent() == Input.EventType.TOUCH)
                 if(_soundButton.buttonPressed(event.get_x(), event.get_y())) {
                     if (!_soundButton.getPressed())
@@ -83,14 +90,13 @@ public class endState extends State {
                 }
                 else
                     _statesManager.enqueueState("playState");
-
-        }
     }
 
     @Override
     public void update(float deltaTime) {
         _bColor.setCurrentColor(2); // color verde
-        _Bar.draw(deltaTime);
+        _arrows.draw(deltaTime);
+        _flashEffect.changeAlpha();
     }
 
     @Override
@@ -110,6 +116,7 @@ public class endState extends State {
         gOver.draw(_G, gOver.get_destRect());
 
         Sprite pAgain = _rM.getSprite("playAgain");
+        pAgain.modifyAlpha(_sin.updateSin());
         pAgain.draw(_G, pAgain.get_destRect());
 
 
@@ -157,6 +164,8 @@ public class endState extends State {
 
         _soundButton.drawButton();
         _instructionButton.drawButton();
+
+        _flashEffect.draw();
 
         return true;
     }

@@ -39,7 +39,7 @@ public class playState extends State {
     ballManager bManager;
     Graphics _G;
 
-    Logic.BehindBars _Bar;
+   Arrows _arrows;
     Logic.BehindColor _bColor;
 
     int _myColor;
@@ -48,11 +48,13 @@ public class playState extends State {
 
     Sprite numbers [] = new Sprite [10];
 
+    flashEffect _flashEffect;
+
     public playState(StatesManager statesManager, ResourceManager resourceManager,
-                     Logic.BehindBars Bar, Logic.BehindColor bColor){
+                     Arrows arrow, Logic.BehindColor bColor){
         _statesManager = statesManager;
         _rM = resourceManager;
-        _Bar = Bar;
+        _arrows = arrow;
         _bColor = bColor;
     }
 
@@ -84,26 +86,27 @@ public class playState extends State {
                 playerDistanceToTop-black.getSpriteHeight()/2,
                 playerDistanceToTop+black.getSpriteHeight()/2));
 
+        _flashEffect = new flashEffect();
+        _flashEffect.init(_rM, _G);
     }
 
     @Override
-    public void handleEvent(List<Input.TouchEvent> l){
-        for(int i = 0; i < l.size(); i++){
-            Input.TouchEvent event = l.get(i);
+    public void handleEvent(Input.TouchEvent event){
             if(event.getEvent() == Input.EventType.TOUCH)
                 cambiaPlayer();
         }
-    }
 
     @Override
     public void update(float deltaTime) {
         _bColor.setCurrentColor(_myColor);
 
-        _Bar.draw(deltaTime);
+        _arrows.draw(deltaTime);
 
         bManager.actualizaBola(deltaTime);
 
         pSystem.ActualizaPartuculas(deltaTime);
+
+        _flashEffect.changeAlpha();
     }
     @Override
     public Boolean render() {
@@ -127,6 +130,8 @@ public class playState extends State {
         player.draw(_G,player.get_destRect());
 
         drawNumber();
+
+        _flashEffect.draw();
 
         return true;
     }

@@ -18,8 +18,7 @@ public class instructionsState extends State {
     Game _game;
     ResourceManager _rM;
     Graphics _G;
-    //int colorMatch;
-    //String[] BGcolors = {"greenBG", "cyanBG", "blueBG", "darkBlueBG", "purpleBG", "greyBG", "orangeBG", "redBG", "browBG"};
+
 
     StatesManager _statesManager;
 
@@ -31,37 +30,44 @@ public class instructionsState extends State {
 
     int prioridad = 0;
 
-    Logic.BehindBars _Bar;
+    Arrows _arrows;
     Logic.BehindColor _bColor;
 
     Button _quitButton;
 
+    flashEffect _flashEffect;
+
+    Sin _sin;
+
     public instructionsState(StatesManager statesManager, ResourceManager resourceManager,
-                             Logic.BehindBars Bar, Logic.BehindColor bColor){
+                             Arrows arrow, Logic.BehindColor bColor){
         _statesManager = statesManager;
         _rM = resourceManager;
-        _Bar = Bar;
+        _arrows = arrow;
         _bColor = bColor;
     }
 
     @Override
-    public void handleEvent(List<Input.TouchEvent> l){
-        for(int i = 0; i < l.size(); i++){
-            Input.TouchEvent event = l.get(i);
-            if(event.getEvent() == Input.EventType.TOUCH)
-                if(_quitButton.buttonPressed(event.get_x(), event.get_y())) {
-                    _statesManager.enqueueState("playState");
-                }
-                else
-                    _statesManager.enqueueState("playState");
-        }
+    public void handleEvent(Input.TouchEvent event){
+        if(event.getEvent() == Input.EventType.TOUCH)
+            if(_quitButton.buttonPressed(event.get_x(), event.get_y())) {
+                _statesManager.enqueueState("playState");
+            }
+            else
+                _statesManager.enqueueState("playState");
     }
+
 
     @Override
     public void init(Game game) {
         _game = game;
         _G = _game.getGraphics();
         _quitButton = new Button(_rM.getSprite("exit"), new Rect(970,1070,200,300), _G);
+
+        _flashEffect = new flashEffect();
+        _flashEffect.init(_rM, _G);
+
+        _sin = new Sin();
     }
 
     @Override
@@ -70,7 +76,9 @@ public class instructionsState extends State {
 
         Graphics G = _game.getGraphics();
 
-        _Bar.draw(deltaTime);
+        _arrows.draw(deltaTime);
+
+        _flashEffect.changeAlpha();
     }
 
     @Override
@@ -101,13 +109,15 @@ public class instructionsState extends State {
                 instructionsY + instructions.getSpriteHeight()));
 
         Sprite tapToPlay = _rM.getSprite("ToPlay");
-
+        tapToPlay.modifyAlpha(_sin.updateSin());
         tapToPlay.draw(_G, new Rect((_G.getWidth()/2)-tapToPlay.getSpriteWidth()/2,
                 (_G.getWidth()/2)+tapToPlay.getSpriteWidth()/2
                 ,tapToPlayY,
                 tapToPlayY + tapToPlay.getSpriteHeight()));
 
         _quitButton.drawButton();
+
+        _flashEffect.draw();
 
         return true;
     }

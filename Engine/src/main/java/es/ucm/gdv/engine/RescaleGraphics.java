@@ -42,6 +42,24 @@ public abstract class RescaleGraphics implements Graphics {
         return ScaleFactor;
     }
 
+    public boolean mouseInsideScreen(int x, int y){
+        Rect r = rescaleRect(new Rect(0, getWidth(), 0,getHeight()));
+        return (x >= r.get_left() &&
+                x <= r.get_right() &&
+                y >= r.get_top() &&
+                y <= r.get_bottom());
+    }
+
+    @Override
+    public boolean mouseInsideRect(int x, int y, Rect rect){
+        Rect r = rescaleRect(rect);
+
+        return(x >= r.get_left() &&
+                x <= r.get_right() &&
+                y >= r.get_top() &&
+                y <= r.get_bottom());
+    }
+
     public Rect rescaleRect(Rect dest){
         Rect newDest = new Rect(0,0,0,0);
 

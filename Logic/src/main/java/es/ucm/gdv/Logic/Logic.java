@@ -26,86 +26,8 @@ public class Logic implements LogicInterface {
     String[] buttonsNames = {"interrogation", "exit", "sound", "mute", "home", "star", "dollar", "settings", "maximize", "shop"};
     int [] colors = {0xff41a85f, 0xff00a885, 0xff3d8eb9, 0xff2969b0, 0xff553982, 0xff28324e, 0xfff37934, 0xffd14b41, 0xff75706b};
 
-
-    int BGspeed = 384;
     public BehindColor _behindColor;
-
-    public class BehindBars{
-        int prioridad = 0;
-
-        public void changePriority(){
-            if(prioridad == 0)
-                prioridad = 1;
-            else prioridad = 0;
-        }
-
-        public int getPriority(){
-            return prioridad;
-        }
-
-        public void draw(float deltaTime){
-            Sprite backArrow = _rM.getSprite("BGArrow1");
-            Rect bacArrowRect = backArrow.get_destRect();
-
-            Sprite backArrow2 = _rM.getSprite("BGArrow2");
-            Rect bacArrowRect2 = backArrow2.get_destRect();
-
-            if(bacArrowRect.get_top() >= _G.getHeight()) {
-                backArrow.set_destRect(new Rect(bacArrowRect.get_left(),
-                        bacArrowRect.get_right(),
-                        -_G.getHeight() + bacArrowRect2.get_top() + (_G.getHeight() - bacArrowRect.get_top()) - 1,
-                        bacArrowRect2.get_top() - 1));
-
-                backArrow.set_destRect(new Rect(bacArrowRect.get_left(),
-                        bacArrowRect.get_right(),
-                        (bacArrowRect2.get_top() - _G.getHeight() + (BGspeed * deltaTime)),
-                        (bacArrowRect2.get_top() + (BGspeed * deltaTime))));
-
-                changePriority();
-            }
-            else if(getPriority() == 0) {
-                backArrow.set_destRect(new Rect(bacArrowRect.get_left(),
-                        bacArrowRect.get_right(),
-                        (bacArrowRect.get_top() + (BGspeed * deltaTime)),
-                        (bacArrowRect.get_bottom() + (BGspeed * deltaTime))));
-
-            }
-            else {
-                backArrow.set_destRect(new Rect(bacArrowRect.get_left(),
-                        bacArrowRect.get_right(),
-                        (bacArrowRect2.get_top() - _G.getHeight() + (BGspeed * deltaTime)),
-                        (bacArrowRect2.get_top() + (BGspeed * deltaTime))));
-            }
-
-
-
-            if(bacArrowRect2.get_top() >= _G.getHeight()) {
-                backArrow2.set_destRect(new Rect(bacArrowRect2.get_left(),
-                        bacArrowRect2.get_right(),
-                        -_G.getHeight()+bacArrowRect.get_top()+(_G.getHeight()-bacArrowRect2.get_top())-1,
-                        bacArrowRect.get_top()-1));
-
-                backArrow2.set_destRect(new Rect(bacArrowRect2.get_left(),
-                        bacArrowRect2.get_right(),
-                        (bacArrowRect.get_top() - _G.getHeight() + (BGspeed * deltaTime)),
-                        (bacArrowRect.get_top() + (BGspeed * deltaTime))));
-
-                changePriority();
-            }
-            else if(getPriority() == 1) {
-                backArrow2.set_destRect(new Rect(bacArrowRect2.get_left(),
-                        bacArrowRect2.get_right(),
-                        bacArrowRect2.get_top() +  (BGspeed * deltaTime),
-                        bacArrowRect2.get_bottom() + (BGspeed * deltaTime)));
-            }
-            else {
-                backArrow2.set_destRect(new Rect(bacArrowRect2.get_left(),
-                        bacArrowRect2.get_right(),
-                        (bacArrowRect.get_top() - _G.getHeight() + (BGspeed * deltaTime)),
-                        (bacArrowRect.get_top() + (BGspeed * deltaTime))));
-            }
-        }
-    }
+    Arrows _arrows;
 
     public class BehindColor{
         int currentColor;
@@ -117,37 +39,41 @@ public class Logic implements LogicInterface {
     public void init(Game game){
        _game = game;
        _rM = new ResourceManager(_game);
-
-        _G = _game.getGraphics();
-
-        BehindBars bars = new BehindBars();
-
-        _behindColor = new BehindColor();
-        _behindColor.currentColor = 0;
-       loadImages();
-
-       createSprites();
-
+       _G = _game.getGraphics();
        _statesManager = new StatesManager(_game);
 
-       State playState = new playState(_statesManager, _rM, bars, _behindColor);
-       playState.stateName = "playState";
-       _statesManager.addState(playState, playState.stateName);
+       loadImages();
+       createSprites();
 
-        State instrState = new instructionsState(_statesManager, _rM, bars, _behindColor);
+       _arrows = new Arrows();
+       _arrows.init(_rM, _G);
+
+       _behindColor = new BehindColor();
+       _behindColor.currentColor = 0;
+
+       createStates();
+
+       //Start game
+       _statesManager.changeState("mainMenuState");
+
+    }
+
+    void createStates(){
+        State playState = new playState(_statesManager, _rM, _arrows, _behindColor);
+        playState.stateName = "playState";
+        _statesManager.addState(playState, playState.stateName);
+
+        State instrState = new instructionsState(_statesManager, _rM, _arrows, _behindColor);
         instrState.stateName = "instrState";
         _statesManager.addState(instrState, instrState.stateName);
 
-       State mainMenuState = new mainMenuState(_statesManager, _rM, bars, _behindColor);
-       mainMenuState.stateName = "mainMenuState";
-       _statesManager.addState(mainMenuState,  mainMenuState.stateName);
+        State mainMenuState = new mainMenuState(_statesManager, _rM, _arrows, _behindColor);
+        mainMenuState.stateName = "mainMenuState";
+        _statesManager.addState(mainMenuState,  mainMenuState.stateName);
 
-       State endState = new endState(_statesManager, _rM, bars, _behindColor);
-       endState.stateName = "endState";
+        State endState = new endState(_statesManager, _rM, _arrows, _behindColor);
+        endState.stateName = "endState";
         _statesManager.addState(endState, endState.stateName);
-
-       _statesManager.changeState("mainMenuState");
-
     }
 
     void loadImages(){
@@ -164,6 +90,7 @@ public class Logic implements LogicInterface {
         _rM.LoadImage("gameOver", _game.getGraphics().newImage("gameOver.png"));
         _rM.LoadImage("playAgain", _game.getGraphics().newImage("playAgain.png"));
         _rM.LoadImage("font", _game.getGraphics().newImage("scoreFont.png"));
+        _rM.LoadImage("white", _game.getGraphics().newImage("white.png"));
     }
 
     void createSprites(){
@@ -259,6 +186,10 @@ public class Logic implements LogicInterface {
         _rM.createSpriteFromImage("playAgain", new Rect(0, pAgain.getWidth(), 0 , pAgain.getHeight()),
                 "playAgain",255);
 
+        Image white = _rM.getImage("white");
+        _rM.createSpriteFromImage("white", new Rect(0, white.getWidth(), 0 , white.getHeight()),
+                "white",255);
+        _rM.getSprite("white").set_destRect(new Rect(0, _G.getWidth(), 0, _G.getHeight()));
 
         //NUMBERS
         int j = 3;
@@ -300,16 +231,13 @@ public class Logic implements LogicInterface {
     }
 
     @Override
-    public void handleEvent(List<Input.TouchEvent> l){
-        _statesManager.getActualState().handleEvent(l);
+    public void handleEvent(Input.TouchEvent event){
+        _statesManager.getActualState().handleEvent(event);
     }
 
     @Override
     public void update(float deltaTime) {
-
         _statesManager.getActualState().update(deltaTime);
-        //Comprobamos si hay algún estado al que tengamos que cambiar.
-
     }
 
     @Override
@@ -321,6 +249,8 @@ public class Logic implements LogicInterface {
 
         _statesManager.getActualState().render();
 
+        //Comprobamos si hay algún estado al que tengamos que cambiar después del render
+        //ya que es lo último a lo que el bucle ppal llama
         if(_statesManager.getQuedState() != null)
             _statesManager.changeState(_statesManager.getQuedState().stateName);
         return true;

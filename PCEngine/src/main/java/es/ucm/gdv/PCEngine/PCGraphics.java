@@ -45,8 +45,8 @@ public class PCGraphics extends RescaleGraphics {
 
             setSize(_width, _height);
             setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+            //setExtendedState(JFrame.MAXIMIZED_BOTH);
             //setUndecorated(true);
-            //_graphics = new PCGraphics(ventana);
 
             addComponentListener(new ComponentAdapter()
             {
@@ -126,10 +126,6 @@ public class PCGraphics extends RescaleGraphics {
        PCImage _image = new PCImage(name);
        return _image;
     }
-
-    //public Sprite createSprite(Image img, Rect src) {
-        //return null;
-    //}
 
     @Override
     public void clear(int color) {

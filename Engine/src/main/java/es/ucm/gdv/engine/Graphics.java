@@ -13,4 +13,5 @@ public interface Graphics {
     public int getPhysicalHeight();
     public float getScaleFactor();
     public Rect rescaleRect(Rect dest);
+    public boolean mouseInsideRect(int x, int y, Rect rect);
 }

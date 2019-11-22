@@ -50,4 +50,31 @@ public class Sprite {
     public void draw(Graphics g, Rect dest){
         g.drawImage(_image, _rectSrc,dest, _alpha);
     }
+
+    /**
+     * Método para modificar el alpha de un sprite
+     *
+     * @param a valor en el que se va a modificar el alpha
+     */
+    public void modifyAlpha(int a){
+        _alpha += a;
+        if(_alpha < 0) _alpha = 0;
+        else if(_alpha > 255) _alpha = 255;
+    }
+
+    /**
+     * Método para cambiar el alpha de un sprite
+     *
+     * @param a nuevo valor del alpha del sprite
+     */
+    public void setAlpha(int a){
+        _alpha = a;
+    }
+
+    /**
+     * Devuelve el alpha correspondiente al sprite
+     */
+    public int getAlpha(){
+        return _alpha;
+    }
 }

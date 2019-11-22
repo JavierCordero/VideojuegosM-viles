@@ -24,15 +24,9 @@ public class Button {
 
     public boolean buttonPressed(int x, int y){
 
-        Rect r = _G.rescaleRect(_position);
-
-        if(x >= r.get_left() &&
-                x <= r.get_right() &&
-                y >= r.get_top() &&
-                y <= r.get_bottom()){
+        if(_G.mouseInsideRect(x,y, _position)){
             pressed = !pressed;
             return true;
-
         }
         return false;
     }

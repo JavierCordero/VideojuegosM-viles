@@ -18,7 +18,7 @@ import es.ucm.gdv.engine.RescaleGraphics;
 
 public class AndroidGame implements Game {
 
-    AndroidGraphics _graphics;
+    AndroidGraphics _G;
     Input _input;
     GameFlow _gameFlow;
     LogicInterface _logic;
@@ -33,8 +33,8 @@ public class AndroidGame implements Game {
      */
     public AndroidGame(AppCompatActivity ac, LogicInterface logic, int screenWidth, int screenHeight){
         _gameFlow = new GameFlow(ac);
-        _graphics = new AndroidGraphics(_gameFlow, ac.getAssets(), screenWidth, screenHeight);
-        _input = new AndroidInput(_graphics._surfaceView);
+        _G = new AndroidGraphics(_gameFlow, ac.getAssets(), screenWidth, screenHeight);
+        _input = new AndroidInput(_G._surfaceView);
         _logic = logic;
         _logic.init(this);
     }
@@ -49,7 +49,7 @@ public class AndroidGame implements Game {
      * @param screenH Nuevo alto fisico
      */
     public void ScreenOrientation(int LogicalW, int LogicalH, int screenW, int screenH){
-        (_graphics).setLogicalScale(LogicalW, LogicalH, screenW, screenH);
+        (_G).setLogicalScale(LogicalW, LogicalH, screenW, screenH);
     }
 
     /**
@@ -59,7 +59,7 @@ public class AndroidGame implements Game {
      */
     @Override
     public Graphics getGraphics() {
-        return _graphics;
+        return _G;
     }
 
     /**
@@ -135,7 +135,13 @@ public class AndroidGame implements Game {
 
         private void handleEvent() {
             List<Input.TouchEvent> l = getInput().getTouchEvents();
-            _logic.handleEvent(l);
+            for(int i = 0; i < l.size(); i++) {
+                Input.TouchEvent event = l.get(i);
+                if( _G.mouseInsideScreen(event.get_x(), event.get_y()))
+                {
+                    _logic.handleEvent(event);
+                }
+            }
         }
 
         /**
@@ -145,9 +151,9 @@ public class AndroidGame implements Game {
             //Llama al render de la logica
             while (!getHolder().getSurface().isValid())
                 ;
-            _graphics.lockCanvas();
+            _G.lockCanvas();
             _logic.render();
-            _graphics.freeCanvas();
+            _G.freeCanvas();
         }
 
         /**
