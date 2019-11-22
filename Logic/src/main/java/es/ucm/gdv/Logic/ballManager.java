@@ -121,6 +121,8 @@ public class ballManager {
                    WhiteBalls[i].active = false;
                    _p.ActivaParticulas(WhiteBalls[i]);
                    _ballsTaken++;
+                   if(_ballsTaken > 999) _ballsTaken = 0;
+
                    if (_ballsTaken != 0 && _ballsTaken % 11 == 0)
                        _ballsSpeed += incrBallSpeed;
                }
@@ -147,6 +149,7 @@ public class ballManager {
                    BlackBalls[i].active = false;
                    _p.ActivaParticulas(BlackBalls[i]);
                    _ballsTaken++;
+                   if(_ballsTaken > 999) _ballsTaken = 0;
                    if (_ballsTaken != 0 && _ballsTaken % 11 == 0)
                        _ballsSpeed += incrBallSpeed;
                }

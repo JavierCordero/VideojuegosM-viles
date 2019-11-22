@@ -22,6 +22,9 @@ public class flashEffect {
         _whiteSprite.draw(_G, _whiteSprite.get_destRect());
     }
 
+    /**
+     * cambia el alpha al valor establecido "alphaModifier"
+     */
     public void changeAlpha(){
         if(_whiteSprite.getAlpha() > 0)
             _whiteSprite.modifyAlpha(alphaModifier);

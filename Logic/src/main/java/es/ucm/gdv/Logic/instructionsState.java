@@ -39,6 +39,12 @@ public class instructionsState extends State {
 
     Sin _sin;
 
+    Sprite tapToPlay;
+    Sprite backArrow;
+    Sprite backArrow2;
+    Sprite howToPlay;
+    Sprite instructions;
+
     public instructionsState(StatesManager statesManager, ResourceManager resourceManager,
                              Arrows arrow, Logic.BehindColor bColor){
         _statesManager = statesManager;
@@ -68,6 +74,12 @@ public class instructionsState extends State {
         _flashEffect.init(_rM, _G);
 
         _sin = new Sin();
+
+        tapToPlay = _rM.getSprite("ToPlay");
+        backArrow = _rM.getSprite("BGArrow1");
+        backArrow2 = _rM.getSprite("BGArrow2");
+        howToPlay = _rM.getSprite("howToPlay");
+        instructions = _rM.getSprite("instructions");
     }
 
     @Override
@@ -79,11 +91,13 @@ public class instructionsState extends State {
         _arrows.draw(deltaTime);
 
         _flashEffect.changeAlpha();
+
+        tapToPlay.modifyAlpha(_sin.updateSin(deltaTime));
     }
 
     @Override
     public Boolean render() {
-        Sprite backArrow = _rM.getSprite("BGArrow1");
+
         Rect bacArrowRect = backArrow.get_destRect();
         _rM.getSprite(_bColor.getBGcolors()[_bColor.currentColor]).draw(_G, new Rect(bacArrowRect.get_left(),
                 bacArrowRect.get_right(),
@@ -91,25 +105,18 @@ public class instructionsState extends State {
                 _G.getHeight()));
         backArrow.draw(_G, backArrow.get_destRect());
 
-        Sprite backArrow2 = _rM.getSprite("BGArrow2");
         backArrow2.draw(_G, backArrow2.get_destRect());
-
-        Sprite howToPlay = _rM.getSprite("howToPlay");
 
         howToPlay.draw(_G, new Rect((_G.getWidth()/2)-howToPlay.getSpriteWidth()/2,
                 (_G.getWidth()/2)+howToPlay.getSpriteWidth()/2
                 ,howToPlayY,
                 howToPlayY + howToPlay.getSpriteHeight()));
 
-        Sprite instructions = _rM.getSprite("instructions");
-
         instructions.draw(_G, new Rect((_G.getWidth()/2)-instructions.getSpriteWidth()/2,
                 (_G.getWidth()/2)+instructions.getSpriteWidth()/2
                 ,instructionsY,
                 instructionsY + instructions.getSpriteHeight()));
 
-        Sprite tapToPlay = _rM.getSprite("ToPlay");
-        tapToPlay.modifyAlpha(_sin.updateSin());
         tapToPlay.draw(_G, new Rect((_G.getWidth()/2)-tapToPlay.getSpriteWidth()/2,
                 (_G.getWidth()/2)+tapToPlay.getSpriteWidth()/2
                 ,tapToPlayY,

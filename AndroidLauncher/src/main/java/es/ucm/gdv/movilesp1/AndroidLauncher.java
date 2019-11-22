@@ -18,13 +18,16 @@ public class AndroidLauncher extends AppCompatActivity {
     AndroidGame game;
     Logic l;
 
+    /**
+     *  Se llama cuando la clase es creada para establecer todos los parámetros necesarios
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //setContentView(R.layout.activity_main);
-        Logic logic = new Logic();
+
+        Logic logic = new Logic(); //Crea la lógica necesaria del juego
         Point size = getAndroidScreenSize();
-        game = new AndroidGame(this, logic, size.x, size.y);
+        game = new AndroidGame(this, logic, size.x, size.y); //Crea el nuevo juego
         setContentView(game.getGameFlow());
     }
 
@@ -40,6 +43,11 @@ public class AndroidLauncher extends AppCompatActivity {
         game.getGameFlow().pause();
     }
 
+    /**
+     * getter para conocer el tamaño de la pantalla
+     *
+     * @return(Point) tamaño de la pantalla
+     */
     private Point getAndroidScreenSize() {
         Display display = getWindowManager().getDefaultDisplay();
         Point size = new Point();
@@ -47,13 +55,18 @@ public class AndroidLauncher extends AppCompatActivity {
         return size;
     }
 
+    /**
+     * Método llamado cuando la configuaración de la pantalla del teléfono cambia.
+     * Si el móvil se gira o es reescalado de alguna manera, esta función será llamada
+     * y realizará los cálculos necesarios.
+     */
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
 
         Point p = getAndroidScreenSize();
 
-        // Checks the orientation of the screen
+        // CComprueba la orientación de la pantalla
         if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
             game.ScreenOrientation(1920, 1080, p.x, p.y);
         } else if (newConfig.orientation == Configuration.ORIENTATION_PORTRAIT){

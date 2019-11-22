@@ -8,7 +8,7 @@ public class PCImage implements Image {
     java.awt.Image _image;
 
     public PCImage(String name){
-        name ="PCLauncher/src/main/assets/" + name;
+        name ="assets/" + name; //Ruta principal para encontrar los assets
         try {
             _image = javax.imageio.ImageIO.read(new java.io.File(name));
             _width = _image.getWidth(null);

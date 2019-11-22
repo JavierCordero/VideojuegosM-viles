@@ -6,14 +6,19 @@ import es.ucm.gdv.engine.ResourceManager;
 import es.ucm.gdv.engine.Sprite;
 
 public class Arrows {
-    int prioridad = 0;
-    int BGspeed = 384;
+    int prioridad = 0; //Determina cual es la imagen de la flecha que se encuentra arriba o abajo
+    int BGspeed = 384; //velocidad de las flechas
     ResourceManager _rM;
     Graphics _G;
+
+    Sprite backArrow;
+    Sprite backArrow2;
 
     public void init(ResourceManager rm, Graphics g){
         _rM = rm;
         _G = g;
+        backArrow = _rM.getSprite("BGArrow1");
+        backArrow2 = _rM.getSprite("BGArrow2");
     }
 
     public void changePriority(){
@@ -26,11 +31,10 @@ public class Arrows {
         return prioridad;
     }
 
+    //Dibuja las flechas del fondo en base a sus sprites
     public void draw(float deltaTime){
-        Sprite backArrow = _rM.getSprite("BGArrow1");
-        Rect bacArrowRect = backArrow.get_destRect();
 
-        Sprite backArrow2 = _rM.getSprite("BGArrow2");
+        Rect bacArrowRect = backArrow.get_destRect();
         Rect bacArrowRect2 = backArrow2.get_destRect();
 
         if(bacArrowRect.get_top() >= _G.getHeight()) {

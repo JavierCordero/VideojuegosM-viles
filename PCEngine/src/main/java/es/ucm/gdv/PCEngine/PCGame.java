@@ -9,7 +9,6 @@ import es.ucm.gdv.engine.Game;
 import es.ucm.gdv.engine.Graphics;
 import es.ucm.gdv.engine.Input;
 import es.ucm.gdv.engine.LogicInterface;
-import es.ucm.gdv.engine.Rect;
 
 public class PCGame implements Game {
 
@@ -23,16 +22,29 @@ public class PCGame implements Game {
     float deltaTime;
     long lastFrameTime;
 
+    /**
+     * Constructor. En él encontramos tras el init() el bucle ppal del juego en PC
+     *
+     * @param logic Lógica que va a utilizar el juego
+     * @param width ancho de la ventana del juego
+     * @param height alto de la ventana del juego
+     *
+     */
     public PCGame(LogicInterface logic, int width, int height){
 
         _G = new PCGraphics(width, height);
-        _input = new PCInput(_G.get_ventana());
+        _input = new PCInput(_G.get_ventana()); //Generamos el input con la ventana para recibir eventos
         _logic = logic;
-        _logic.init(this);
+        _logic.init(this);//inicializamos la lógica con el juego como parámetro
 
         deltaTime = 0.0f;
         lastFrameTime = System.nanoTime();
 
+        mainLoop();
+    }
+
+    private void mainLoop(){
+        //Bucle principal del juego
         while(true){
             deltaTime(); //Actualizamos el deltaTime
             handleEvent();
@@ -41,6 +53,10 @@ public class PCGame implements Game {
         }
     }
 
+    /**
+     * Utiliza la lista de eventos detectados y los manda uno a uno a la lógica para que
+     * cada estado sólo se tenga de preocupar de un evento en lugar de toda la lista
+     */
     private void handleEvent() {
         List<Input.TouchEvent> l = getInput().getTouchEvents();
         for(int i = 0; i < l.size(); i++) {
@@ -57,6 +73,9 @@ public class PCGame implements Game {
         _logic.update(deltaTime);
     }
 
+    /**
+     * Bucle principal de renderizado de PC
+     */
     public void render(){
 
         _strategy = _G.getBufferStrategy();

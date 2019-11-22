@@ -16,6 +16,10 @@ public class PCGraphics extends RescaleGraphics {
 
     int _width, _height;
     int _logicalWidth = 1080, _logicalHeight = 1920;
+
+    /**
+     *Clase para la utilización de JFrame
+     */
     public class Ventana extends JFrame {
 
 
@@ -45,8 +49,6 @@ public class PCGraphics extends RescaleGraphics {
 
             setSize(_width, _height);
             setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-            //setExtendedState(JFrame.MAXIMIZED_BOTH);
-            //setUndecorated(true);
 
             addComponentListener(new ComponentAdapter()
             {

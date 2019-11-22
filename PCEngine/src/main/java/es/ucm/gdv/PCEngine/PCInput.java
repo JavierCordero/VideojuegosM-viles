@@ -19,31 +19,12 @@ public class PCInput extends AbstractInput {
 
     }
 
-    class MouseEvent implements MouseListener, MouseMotionListener {
+    class MouseEvent implements MouseListener {
 
         public MouseEvent(){
             _ventana.addMouseListener(this);
-            _ventana.addMouseMotionListener(this);
         }
 
-        @Override
-        public void mouseClicked(java.awt.event.MouseEvent mouseEvent) {
-
-         /*   TouchEvent t = new TouchEvent();
-            t.set_event(EventType.TOUCH);
-            t.set_x(mouseEvent.getX());
-            t.set_y(mouseEvent.getY());
-            t.set_fingerID(mouseEvent.getID());
-
-            TouchEvent r = new TouchEvent();
-            r.set_event(EventType.RELEASE);
-            r.set_x(mouseEvent.getX());
-            r.set_y(mouseEvent.getY());
-            r.set_fingerID(mouseEvent.getID());
-
-            addEvent(t);
-            addEvent(r);*/
-        }
 
         @Override
         public void mousePressed(java.awt.event.MouseEvent mouseEvent) {
@@ -67,24 +48,15 @@ public class PCInput extends AbstractInput {
             addEvent(t);
         }
 
+        //No son necesarios para la práctica
         @Override
-        public void mouseEntered(java.awt.event.MouseEvent mouseEvent) {
-
-        }
-
-        @Override
-        public void mouseExited(java.awt.event.MouseEvent mouseEvent) {
-
-        }
+        public void mouseClicked(java.awt.event.MouseEvent mouseEvent) { }
 
         @Override
-        public void mouseDragged(java.awt.event.MouseEvent mouseEvent) {
-
-        }
+        public void mouseEntered(java.awt.event.MouseEvent mouseEvent) { }
 
         @Override
-        public void mouseMoved(java.awt.event.MouseEvent mouseEvent) {
+        public void mouseExited(java.awt.event.MouseEvent mouseEvent) { }
 
-        }
     }
 }

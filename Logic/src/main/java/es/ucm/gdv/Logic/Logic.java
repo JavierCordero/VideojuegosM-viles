@@ -25,6 +25,7 @@ public class Logic implements LogicInterface {
     String[] BGcolors = {"greenBG", "cyanBG", "blueBG", "darkBlueBG", "purpleBG", "greyBG", "orangeBG", "redBG", "browBG"};
     String[] buttonsNames = {"interrogation", "exit", "sound", "mute", "home", "star", "dollar", "settings", "maximize", "shop"};
     int [] colors = {0xff41a85f, 0xff00a885, 0xff3d8eb9, 0xff2969b0, 0xff553982, 0xff28324e, 0xfff37934, 0xffd14b41, 0xff75706b};
+    int playerDistanceToTop = 1200;
 
     public BehindColor _behindColor;
     Arrows _arrows;
@@ -94,7 +95,6 @@ public class Logic implements LogicInterface {
     }
 
     void createSprites(){
-
         Image tapToPlay = _rM.getImage("tapToPlay");
 
         _rM.createSpriteFromImage("tapToPlay",
@@ -148,6 +148,20 @@ public class Logic implements LogicInterface {
                 new Rect(0,528,384/2,384),
                 "blackPlayer", 255);
 
+        Sprite white = _rM.getSprite("whitePlayer");
+        Sprite black = _rM.getSprite("blackPlayer");
+
+        //Establecemos las coordenadas de destino de ambos jugadores
+        white.set_destRect(new Rect((_G.getWidth()/2)-white.getSpriteWidth()/2,
+                (_G.getWidth()/2)+white.getSpriteWidth()/2,
+                playerDistanceToTop-white.getSpriteHeight()/2,
+                playerDistanceToTop+white.getSpriteHeight()/2));
+
+        black.set_destRect(new Rect((_G.getWidth()/2)-black.getSpriteWidth()/2,
+                (_G.getWidth()/2)+black.getSpriteWidth()/2,
+                playerDistanceToTop-black.getSpriteHeight()/2,
+                playerDistanceToTop+black.getSpriteHeight()/2));
+
         for(int i = 0; i < BGcolors.length; i++){
             _rM.createSpriteFromImage("backgrounds",
                     new Rect((288/9)*i,(288/9)*(i+1),0,32),
@@ -186,8 +200,8 @@ public class Logic implements LogicInterface {
         _rM.createSpriteFromImage("playAgain", new Rect(0, pAgain.getWidth(), 0 , pAgain.getHeight()),
                 "playAgain",255);
 
-        Image white = _rM.getImage("white");
-        _rM.createSpriteFromImage("white", new Rect(0, white.getWidth(), 0 , white.getHeight()),
+        Image whiteImg = _rM.getImage("white");
+        _rM.createSpriteFromImage("white", new Rect(0, whiteImg.getWidth(), 0 , whiteImg.getHeight()),
                 "white",255);
         _rM.getSprite("white").set_destRect(new Rect(0, _G.getWidth(), 0, _G.getHeight()));
 

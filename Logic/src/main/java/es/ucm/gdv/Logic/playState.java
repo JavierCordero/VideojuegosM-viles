@@ -16,19 +16,16 @@ import es.ucm.gdv.engine.State;
 import es.ucm.gdv.engine.StatesManager;
 
 
+/**
+ * Estado principal del juego, dónde se ejecutará toda la lógica de las bolas, las palas...
+ */
 public class playState extends State {
-
-
 
     Game _game;
     ResourceManager _rM;
-
     StatesManager _statesManager;
 
     String actualPlayer = "whitePlayer";
-
-
-    int playerDistanceToTop = 1200;
 
     //parametros de los numeros
     int numbersHeight = 400;
@@ -39,16 +36,15 @@ public class playState extends State {
     ballManager bManager;
     Graphics _G;
 
-   Arrows _arrows;
+    Arrows _arrows;
     Logic.BehindColor _bColor;
-
     int _myColor;
-
     int numSprites = 0;
-
     Sprite numbers [] = new Sprite [10];
-
     flashEffect _flashEffect;
+
+    Sprite backArrow;
+    Sprite backArrow2;
 
     public playState(StatesManager statesManager, ResourceManager resourceManager,
                      Arrows arrow, Logic.BehindColor bColor){
@@ -68,38 +64,32 @@ public class playState extends State {
         bManager = new ballManager(_rM, _G, pSystem, _statesManager);
         bManager.setActualPlayer(actualPlayer);
 
+        backArrow = _rM.getSprite("BGArrow1");
+        backArrow2 = _rM.getSprite("BGArrow2");
+
+        //Creamos todos los numeros necesarios para la puntiación (max 999)
         for( int i = 0; i < 10; i++){
             numbers[i] =_rM.getSprite("number" + i);
         }
+
+        //Seleccionamos de manera aleatoria el color de juego
         _myColor = (int) (Math.random() * _bColor.getBGcolors().length-1) + 1;
 
-        Sprite white = _rM.getSprite("whitePlayer");
-        Sprite black = _rM.getSprite("blackPlayer");
-
-        white.set_destRect(new Rect((_G.getWidth()/2)-white.getSpriteWidth()/2,
-                (_G.getWidth()/2)+white.getSpriteWidth()/2,
-                playerDistanceToTop-white.getSpriteHeight()/2,
-                playerDistanceToTop+white.getSpriteHeight()/2));
-
-        black.set_destRect(new Rect((_G.getWidth()/2)-black.getSpriteWidth()/2,
-                (_G.getWidth()/2)+black.getSpriteWidth()/2,
-                playerDistanceToTop-black.getSpriteHeight()/2,
-                playerDistanceToTop+black.getSpriteHeight()/2));
-
+        //Generamos el efecto de flash y lo inicializamos
         _flashEffect = new flashEffect();
         _flashEffect.init(_rM, _G);
+
+        _bColor.setCurrentColor(_myColor);
     }
 
     @Override
     public void handleEvent(Input.TouchEvent event){
             if(event.getEvent() == Input.EventType.TOUCH)
-                cambiaPlayer();
+                cambiaPlayer(); //Cambia entre los dos jugadores disponibles
         }
 
     @Override
     public void update(float deltaTime) {
-        _bColor.setCurrentColor(_myColor);
-
         _arrows.draw(deltaTime);
 
         bManager.actualizaBola(deltaTime);
@@ -108,18 +98,17 @@ public class playState extends State {
 
         _flashEffect.changeAlpha();
     }
+
     @Override
     public Boolean render() {
 
-        Sprite backArrow = _rM.getSprite("BGArrow1");
         Rect bacArrowRect = backArrow.get_destRect();
         _rM.getSprite(_bColor.getBGcolors()[_bColor.currentColor]).draw(_G, new Rect(bacArrowRect.get_left(),
                 bacArrowRect.get_right(),
                 0,
                 _G.getHeight()));
-        backArrow.draw(_G, backArrow.get_destRect());
 
-        Sprite backArrow2 = _rM.getSprite("BGArrow2");
+        backArrow.draw(_G, backArrow.get_destRect());
         backArrow2.draw(_G, backArrow2.get_destRect());
 
         bManager.renderBalls();
@@ -131,11 +120,12 @@ public class playState extends State {
 
         drawNumber();
 
-        _flashEffect.draw();
+        _flashEffect.draw(); //Efecto para dibujar el flash al entrar en cada estado
 
         return true;
     }
 
+    //Pinta los números en sus lugares correspondientes dependiendo de la puntuación actual
     void drawNumber(){
 
         int points = bManager.getPoints();
@@ -166,6 +156,7 @@ public class playState extends State {
         if(points > 99)numbers[centenas].draw(_G, centenasRect);
     }
 
+    //Cambia la imagen del jugador
     void cambiaPlayer(){
         if(actualPlayer == "whitePlayer") actualPlayer = "blackPlayer";
         else actualPlayer = "whitePlayer";

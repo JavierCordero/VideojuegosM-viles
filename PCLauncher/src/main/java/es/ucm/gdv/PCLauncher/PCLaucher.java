@@ -4,14 +4,17 @@ import javax.swing.JFrame;
 
 import es.ucm.gdv.PCEngine.PCGame;
 import es.ucm.gdv.Logic.Logic;
-import es.ucm.gdv.PCEngine.PCGraphics;
-import es.ucm.gdv.engine.LogicInterface;
 
+/**
+ * PCLauncher
+ *
+ * Arranca el sistema para ordenadores
+ */
 public class PCLaucher extends JFrame {
 
     public static void main(String[] arg){
 
-        int _width = 800, _height = 600;
+        int _width = 1080, _height = 720; // tamaños por defecto de la pantalla
 
         PCGame game = new PCGame(new Logic(), _width, _height);
 

@@ -31,6 +31,11 @@ public class endState extends State {
 
     flashEffect _flashEffect;
 
+    Sprite pAgain;
+    Sprite backArrow;
+    Sprite backArrow2;
+    Sprite _gOver;
+
     Sin _sin;
 
     public void setScore(int score){
@@ -56,7 +61,7 @@ public class endState extends State {
                 364,
                 364 + gOver.getSpriteHeight()));
 
-        Sprite pAgain = _rM.getSprite("playAgain");
+        pAgain = _rM.getSprite("playAgain");
         pAgain.set_destRect(new Rect((_G.getWidth()/2)-pAgain.getSpriteWidth()/2,
                 (_G.getWidth()/2)+pAgain.getSpriteWidth()/2,
                 1396,
@@ -72,6 +77,9 @@ public class endState extends State {
         _flashEffect = new flashEffect();
         _flashEffect.init(_rM, _G);
 
+        backArrow = _rM.getSprite("BGArrow1");
+        backArrow2 = _rM.getSprite("BGArrow2");
+        _gOver = _rM.getSprite("gameOver");
         _sin = new Sin();
     }
 
@@ -97,28 +105,22 @@ public class endState extends State {
         _bColor.setCurrentColor(2); // color verde
         _arrows.draw(deltaTime);
         _flashEffect.changeAlpha();
+
+        pAgain.modifyAlpha(_sin.updateSin(deltaTime));
     }
 
     @Override
     public Boolean render() {
-        Sprite backArrow = _rM.getSprite("BGArrow1");
+
         Rect bacArrowRect = backArrow.get_destRect();
         _rM.getSprite(_bColor.getBGcolors()[_bColor.currentColor]).draw(_G, new Rect(bacArrowRect.get_left(),
                 bacArrowRect.get_right(),
                 0,
                 _G.getHeight()));
+
         backArrow.draw(_G, backArrow.get_destRect());
-
-        Sprite backArrow2 = _rM.getSprite("BGArrow2");
         backArrow2.draw(_G, backArrow2.get_destRect());
-
-        Sprite gOver = _rM.getSprite("gameOver");
-        gOver.draw(_G, gOver.get_destRect());
-
-        Sprite pAgain = _rM.getSprite("playAgain");
-        pAgain.modifyAlpha(_sin.updateSin());
-        pAgain.draw(_G, pAgain.get_destRect());
-
+        _gOver.draw(_G, _gOver.get_destRect());
 
         //Score
         int n =(int)(_score) / 100;
@@ -131,6 +133,19 @@ public class endState extends State {
         if(n == 10) n = 0;
         drawNumber(n, 0);
 
+        drawLetters(n);
+
+        _soundButton.drawButton();
+        _instructionButton.drawButton();
+
+        pAgain.draw(_G, pAgain.get_destRect());
+
+        _flashEffect.draw();
+
+        return true;
+    }
+
+    void drawLetters(int n){
         //Points
         Sprite letter = _rM.getSprite("letrap");
         letter.draw(_G, new Rect(_G.getWidth() / 2 - 3 * numbersSeparation,
@@ -161,15 +176,9 @@ public class endState extends State {
         letter.draw(_G, new Rect(_G.getWidth() / 2 + 2 * numbersSeparation,
                 _G.getWidth() / 2 + numbers[n].getSpriteWidth() + 2 * numbersSeparation,
                 numbersHeight + 200,numbersHeight + 300));
-
-        _soundButton.drawButton();
-        _instructionButton.drawButton();
-
-        _flashEffect.draw();
-
-        return true;
     }
 
+    //Función para pintar los números en pantalla en su lugar correspondiente
     void drawNumber(int n, int separation){
         numbers[n].draw(_G, new Rect(_G.getWidth() / 2 + separation * numbersSeparation,
                 _G.getWidth() / 2 + numbers[n].getSpriteWidth() + separation * numbersSeparation,
