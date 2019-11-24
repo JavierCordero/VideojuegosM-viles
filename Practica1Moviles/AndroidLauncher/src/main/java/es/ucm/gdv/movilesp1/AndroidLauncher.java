@@ -29,6 +29,7 @@ public class AndroidLauncher extends AppCompatActivity {
         Point size = getAndroidScreenSize();
         game = new AndroidGame(this, logic, size.x, size.y); //Crea el nuevo juego
         setContentView(game.getGameFlow());
+        getSupportActionBar().hide();
     }
 
     @Override

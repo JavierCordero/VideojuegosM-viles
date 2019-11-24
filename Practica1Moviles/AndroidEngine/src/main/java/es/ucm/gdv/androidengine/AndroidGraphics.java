@@ -34,13 +34,11 @@ public class AndroidGraphics extends RescaleGraphics {
      * @param sv surfaceView
      * @param am AssetManager
      */
-    public AndroidGraphics(SurfaceView sv, AssetManager am, int screenWidth, int screenHeight){
+    public AndroidGraphics(SurfaceView sv, AssetManager am, int screenWidth, int screenHeight) {
         super(screenWidth, screenHeight);
         _surfaceView = sv;
         _assetManager = am;
-        _holder  = sv.getHolder();
-
-
+        _holder = sv.getHolder();
     }
 
     /**
@@ -72,8 +70,14 @@ public class AndroidGraphics extends RescaleGraphics {
     /**
      * Bloquea el canvas para ser usado posteriormente
      */
-    public void lockCanvas(){
-        _canvas = _holder.lockCanvas();
+    public void lockCanvas() {
+
+        //Si la versión es mayor que la 26
+        if (android.os.Build.VERSION.SDK_INT >= 26) {
+            _canvas = _holder.lockHardwareCanvas();
+        } else {
+            _canvas = _holder.lockCanvas();
+        }
     }
 
     /**
